@@ -2,6 +2,7 @@ package antgame;
 
 public class Ant {
 	//this is my world
+	//send me back
 	int id;
 	int state;
 	Color color;
