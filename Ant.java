@@ -1,6 +1,7 @@
 package antgame;
 
 public class Ant {
+	//testing
 	
 	int id;
 	int state;
