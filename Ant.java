@@ -1,26 +1,19 @@
 package antgame;
 
 public class Ant {
-	//this is my world
-	//send me back
-	int id;
-	int state;
-	Color color;
-	int resting;
-	Direction direction;
-	boolean hasFood;
-	boolean isAlive;
 	
-	public Ant(int state, Color color, int resting, Direction direction, boolean hasFood){
+	int id;
+	int state = 0;		//not sure
+	Color color;
+	int resting = 0;
+	Direction direction;
+	boolean hasFood = false;
+	boolean isAlive = true;
+	
+	public Ant(int id, Color color){
 		this.id = id;
-		this.state = 0;
 		this.color = color;
-		this.resting = resting;
-		this.direction = new Direction(DirectionType.ZERO);
-		this.hasFood = hasFood;
-		this.isAlive = true;
-		
-		//Test Commit
+	
 	}
 		
     public void setToDead() {
@@ -69,6 +62,21 @@ public class Ant {
 
     public boolean isAlive() {
         return isAlive;
+    }
+    
+    public void adjacent_ants(Position pos, Color color){
+    	
+    }
+    
+    public void checkForSurroundedAnts(Position pos){
+    	
+    }
+    public void checkSurrounded(Position pos){
+    	
+    }
+    
+    public void step(int num){
+    	
     }
     
     
