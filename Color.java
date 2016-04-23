@@ -1,23 +1,40 @@
 package antgame;
 
-public class Color {
-	ColorType ct;
+public enum Color {
+	RED, BLACK;
 	
-	public Color(ColorType ct){
-		this.ct = ct;
+	public Color other_color(Color c){
+		if(c.equals(Color.RED)){
+			return Color.BLACK;
+		}else{
+			return Color.RED;
+		}
 	}
 
-	public ColorType other_color(Color c){
-		if(c.getColorType().equals(ColorType.RED)){
-			return ColorType.BLACK;
-		}else{
-			return ColorType.RED;
-		}
-		
-	}
-	
-	public ColorType getColorType(){
-		return ct;
-	}
 	
 }
+
+//public class Color {
+//	ColorType ct;
+//	
+//	public Color(ColorType ct){
+//		this.ct = ct;
+//	}
+//}
+//
+//
+//
+//	public ColorType other_color(Color c){
+//		if(c.getColorType().equals(ColorType.RED)){
+//			return ColorType.BLACK;
+//		}else{
+//			return ColorType.RED;
+//		}
+//		
+//	}
+//	
+//	public ColorType getColorType(){
+//		return ct;
+//	}
+//	
+//}

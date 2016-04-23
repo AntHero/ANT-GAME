@@ -6,7 +6,7 @@ public class Ant {
 	int state = 0;		//not sure
 	Color color;
 	int resting = 0;
-	Direction direction;
+	int direction;
 	boolean hasFood = false;
 	boolean isAlive = true;
 	
@@ -28,7 +28,7 @@ public class Ant {
         this.resting = resting;
     }
 
-    public void setDirection(Direction direction) {
+    public void setDirection(int direction) {
         this.direction = direction;
     }
 
@@ -48,7 +48,7 @@ public class Ant {
         return resting;
     }
 
-    public Direction getDirection() {
+    public int getDirection() {
         return direction;
     }
 
