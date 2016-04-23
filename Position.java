@@ -17,13 +17,13 @@ public class Position {
 		return y;
 	}
 	
-	public Position adjacent_cell(Position pos, int direction) {
+	public Position adjacent_cell(Position pos, Direction direction) {
 		int x = pos.getX();
 		int y = pos.getY();
-		assert(direction>=0 && direction<=5);
+
 	
 		if (x % 2 == 0) { // for even x position values
-			switch (direction) {
+			switch (direction.getDir()) {
 			case 0:
 				return new Position(x+1, y);
 			case 1:
@@ -38,7 +38,7 @@ public class Position {
 				return new Position(x, y-1);
 			}
 		} else {	//for odd x position values
-			switch (direction) {
+			switch (direction.getDir()) {
 			case 0:
 				return new Position(x+1, y);
 			case 1:
@@ -54,7 +54,7 @@ public class Position {
 			}
 
 		}
-		throw new IllegalArgumentException("The DirectionType has to be between ZERO and FIVE");
+		throw new IllegalArgumentException();
 	}
 	
 }

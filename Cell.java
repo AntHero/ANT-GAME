@@ -7,5 +7,8 @@ public class Cell {
     public Position getPosition() {
         return position;
     }
+    
+   
+    
   
 }
