@@ -12,6 +12,10 @@ public class Cell {
    public Cell getCellType(){
 	   return instance;
    }
+   
+   public boolean getIsRocky(){
+	   return instance.getClass().equals(RockyCell.class);
+   }
     
   
 }

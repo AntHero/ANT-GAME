@@ -5,16 +5,17 @@ public class ClearCell extends Cell {
 
     Position position;
     Ant ant;
-    boolean hasAnt;
+    boolean hasAnt;		//this might be unneeded as they it can be implemented later with just ant
     int food;
     //TO-DO implement type marker.
-    boolean redMarker;
-    boolean blackMarker;
+    int redMarker = -1;
+    int blackMarker = -1;
 
     public ClearCell(int x, int y, int food) {
         this.hasAnt = false;
         this.food = food;
         this.position = new Position(x, y);
+        instance = this;
     }
 
     public void antMoved() {
@@ -27,22 +28,43 @@ public class ClearCell extends Cell {
         hasAnt = true;
     }
     
-    public void setFoodUp() {
-        this.food = this.food + 1;
+    //changed it from + to - because picking food up takes food off the cell
+    public void pickFoodUp() {
+        this.food = this.food - 1;
     }
     
     public void setFoodDown() {
-        this.food = this.food - 1;
+        this.food = this.food + 1;
+    }
+    
+    public void setFood(int i){
+    	this.food = i;
     }
 
-    public void setRedMarker(boolean redMarker) {
+    public void setRedMarker(int redMarker) {
         this.redMarker = redMarker;
     }
 
-    public void setBlackMarker(boolean blackMarker) {
+    public void setBlackMarker(int blackMarker) {
         this.blackMarker = blackMarker;
     }
+    
+    public boolean hasRedMarker() {
+        return redMarker != -1;
+    }
 
+    public boolean hasBlackMarker() {
+        return blackMarker != -1;
+    }
+    
+    public void removeRedMarker(){
+    	redMarker = -1;
+    }
+
+    public void removeBlackMarker(){
+    	blackMarker = -1;
+    }
+    
     public Ant getAnt() {
         return ant;
     }
@@ -54,14 +76,26 @@ public class ClearCell extends Cell {
     public int getFood() {
         return food;
     }
-
-    public boolean hasRedMarker() {
-        return redMarker;
+    
+    public void setAntExist(){
+    	if(this.ant!=null){
+    		throw new UnsupportedOperationException();
+    	}
+    	this.hasAnt = true;
     }
-
-    public boolean hasBlackMarker() {
-        return blackMarker;
+    
+    public void removeAntExist(){
+    	this.hasAnt = false;
     }
+    
+    public void setAnt(Ant ant){
+    	this.ant=ant;
+    }
+    
+    public void removeAnt(){
+    	this.ant = null;
+    }
+    
     
 
 }

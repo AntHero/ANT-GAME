@@ -9,6 +9,7 @@ public class AntHillCell extends ClearCell{
        super(x, y, food);
        this.ant = ant;
        this.color = ant.getColor();
+       instance = this;
     }
     
 
