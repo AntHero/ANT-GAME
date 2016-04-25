@@ -57,11 +57,11 @@ public class ClearCell extends Cell {
         return blackMarker != -1;
     }
     
-    public void removeRedMarker(){
+    public void clearRedMarker(){
     	redMarker = -1;
     }
 
-    public void removeBlackMarker(){
+    public void clearBlackMarker(){
     	blackMarker = -1;
     }
     

@@ -1,4 +1,5 @@
 package antgame;
+import java.util.Random;
 
 
 public class MainMethodTestingSuite {
@@ -16,6 +17,13 @@ public class MainMethodTestingSuite {
 		System.out.println(c.getCellType().getClass().equals(RockyCell.class));		
 		System.out.println(c.getIsRocky());	
 		System.out.println(d.getIsRocky());	
-
+		System.out.println("");
+		
+		Random r = new Random();
+		r.setSeed(10);
+		System.out.println(r.nextInt(100));
+		
+		
+		
 	}
 }
