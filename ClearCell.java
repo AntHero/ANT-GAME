@@ -62,8 +62,6 @@ public class ClearCell extends Cell {
     public boolean hasBlackMarker() {
         return blackMarker;
     }
-    public boolean some_ant_at(Position p){
-    	return
-    }
+    
 
 }

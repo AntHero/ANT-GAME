@@ -17,13 +17,14 @@ public class Position {
 		return y;
 	}
 	
-	public Position adjacent_cell(Position pos, Direction direction) {
+	public Position adjacent_cell(Position pos, int dir) {
+		assert(dir>=0 && dir<=5);
 		int x = pos.getX();
 		int y = pos.getY();
 
 	
 		if (x % 2 == 0) { // for even x position values
-			switch (direction.getDir()) {
+			switch (dir) {
 			case 0:
 				return new Position(x+1, y);
 			case 1:
@@ -38,7 +39,7 @@ public class Position {
 				return new Position(x, y-1);
 			}
 		} else {	//for odd x position values
-			switch (direction.getDir()) {
+			switch (dir) {
 			case 0:
 				return new Position(x+1, y);
 			case 1:
