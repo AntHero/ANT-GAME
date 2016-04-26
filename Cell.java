@@ -17,5 +17,8 @@ public class Cell {
 	   return instance.getClass().equals(RockyCell.class);
    }
     
+   public void setAnt(){
+	   
+   }
   
 }
