@@ -65,10 +65,10 @@ public class WorldParser {
                     } else if (c == '.') {
                         map[i][j] = new ClearCell(i, j, 0);
                     } else if (c == '+') {
-                        map[i][j] = new AntHillCell(i, j, 0, new Ant(id, Color.RED), Color.RED);
+                        map[i][j] = new AntHillCell(i, j, 0, Color.RED);
                         id++;
                     } else if (c == '-') {
-                        map[i][j] = new AntHillCell(i, j, 0, new Ant(id, Color.BLACK), Color.BLACK);
+                        map[i][j] = new AntHillCell(i, j, 0, Color.BLACK);
                         id++;
                     } else if (Character.isDigit(c)) {
                         map[i][j] = new ClearCell(i, j, c);
