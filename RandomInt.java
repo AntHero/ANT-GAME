@@ -7,10 +7,12 @@ public class RandomInt {
 
 	}
 
+	
 	public int randomint(int n, int seed) {
 		Random r = new Random();
 		r.setSeed(seed);
-		return r.nextInt(n);	
+		return r.nextInt(n);	//returns from 0 to n inclusive. so maybe add +1 to n?
+		
 	}
 
 	// THIS METHOD DOES NOT WORK AS OF YET, NEED HELP!
