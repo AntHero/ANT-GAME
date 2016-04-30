@@ -11,4 +11,8 @@ public class Markers {
 		this.n=n;
 		this.c=c;
 	}
+	//for brainParser use.
+	Markers(int i) {
+        this.n = i;
+    }
 }
