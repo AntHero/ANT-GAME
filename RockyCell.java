@@ -6,9 +6,4 @@ public class RockyCell extends Cell {
         this.position = new Position(x,y);
         instance = this;
     }
-    
-//    public Class cellType(){
-//    	return RockyCell.class;
-//    }
-    
 }

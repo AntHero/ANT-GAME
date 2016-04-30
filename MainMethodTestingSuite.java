@@ -25,7 +25,7 @@ public class MainMethodTestingSuite {
 //		System.out.println(r.nextInt(100));
 		
 		World w = new World();
-		w.randomWorld();
+		w.randomWorld(1);
 		w.visualWorld();
 		
 		

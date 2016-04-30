@@ -26,7 +26,7 @@ public class World {
 		return instance[p.getX()][p.getY()];
 	}
 
-	public Cell[][] randomWorld() {
+	public Cell[][] randomWorld(int seed) {
 		if (instance == null) {
 
 			// System.out.println("hello");
@@ -57,27 +57,30 @@ public class World {
 			}
 			// placing anthills randomly
 			// the parameter is the seed number
-			antHillCreatorHelper(0);
+			antHillCreatorHelper(seed);
 
 			// scans world left to right initializing ants on the antcells
-			// for (int i = 0; i < WORLDSIZE; i++) {
-			// for (int j = 0; j < WORLDSIZE; j++) {
-			// if (instance[i][j].equals(AntHillCell.class)){
-			// c = (AntHillCell) instance[i][j];
-			// if(c.getColor().equals(Color.RED)){
-			// antOnHill = new Ant(antID, Color.RED);
-			// c.setAnt(antOnHill);
-			// c.setAntExist();
-			// antID++;
-			// }else{
-			// antOnHill = new Ant(antID, Color.BLACK);
-			// c.setAnt(antOnHill);
-			// c.setAntExist();
-			// antID++;
-			// }
-			// }
-			// }
-			// }
+			// i is the y axis
+//			for (int i = 0; i < WORLDSIZE; i++) {
+//				// j is the x axis
+//				for (int j = 0; j < WORLDSIZE; j++) {
+//
+//					if (instance[i][j].equals(AntHillCell.class)) {
+//						c = (AntHillCell) instance[i][j];
+//						if (c.getColor().equals(Color.RED)) {
+//							antOnHill = new Ant(antID, Color.RED);
+//							c.setAnt(antOnHill);
+//							c.setAntExist();
+//							antID++;
+//						} else {
+//							antOnHill = new Ant(antID, Color.BLACK);
+//							c.setAnt(antOnHill);
+//							c.setAntExist();
+//							antID++;
+//						}
+//					}
+//				}
+//			}
 			//
 			// //11 food blob placements
 			//
@@ -104,15 +107,22 @@ public class World {
 	public void visualWorld() throws FileNotFoundException {
 		int counter = 0;
 		PrintWriter out = new PrintWriter("text.txt");
+
+		// i is the y axis due to how printing works
 		for (int i = 0; i < WORLDSIZE; i++) {
+			// j is the x axis
 			for (int j = 0; j < WORLDSIZE; j++) {
-				if (instance[i][j].getIsRocky()) {
+				if (instance[j][i].getIsRocky()) {
 					out.print("# ");
 					++counter;
-				} else if (instance[i][j].getIsAntHill()) {
-					out.print("* ");
+				} else if (instance[j][i].getIsAntHill()) {
+					if (instance[j][i].getHillColor().equals(Color.RED)) {
+						out.print("+ ");
+					} else {
+						out.print("- ");
+					}
 					++counter;
-				}else if(instance[i][j].getIsClear()){
+				} else if (instance[j][i].getIsClear()) {
 					out.print(". ");
 					++counter;
 				}
@@ -124,6 +134,27 @@ public class World {
 			}
 		}
 		out.close();
+	}
+
+	private void antIDMethod() {		
+		Color cHolder;
+		int antID = 0;
+		Ant antOnHill = null;
+		AntHillCell c = null;
+		ClearCell foodBlobUpperLeftCorner = null;
+		int foodX;
+		int foodY;
+		
+		
+		for (int i = 0; i < WORLDSIZE; i++) {			
+			for (int j = 0; j < WORLDSIZE; j++) {
+				if(instance[i][j].getIsAntHill()){
+					cHolder = instance[i][j].getHillColor();
+					antOnHill = new Ant(antID, cHolder);
+					
+				}
+			}
+		}
 	}
 
 	private void antHillCreatorHelper(int seed) {
@@ -138,12 +169,12 @@ public class World {
 		redY = r.randomint(136, seed + 2) + 7;
 		blackX = r.randomint(136, seed + 3) + 7;
 		blackY = r.randomint(136, seed + 4) + 7;
+
+		// for testing
 		System.out.println(redX);
 		System.out.println(redY);
 		System.out.println(blackX);
 		System.out.println(blackY);
-
-		
 
 		if (redY % 2 == 0) {
 			for (int i = 0; i < 7; i++) {
@@ -281,5 +312,4 @@ public class World {
 			}
 		}
 	}
-
 }
