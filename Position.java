@@ -3,6 +3,7 @@ package antgame;
 public class Position {
 	int x;
 	int y;
+	//constructor x and y axis
 	public Position(int x, int y){
 		this.x = x;
 		this.y = y;
@@ -17,12 +18,16 @@ public class Position {
 		return y;
 	}
 	
+	//takes Position and Direction parameters to return the adjacent(directly in front) position of current position
 	public Position adjacent_cell(Position pos, int dir) {
 		assert(dir>=0 && dir<=5);
+		//local variables for the Position
 		int x = pos.getX();
 		int y = pos.getY();
 
 	
+		//adjacent position depends on the x axis of current position 
+		//because hexagon grid 
 		if (x % 2 == 0) { // for even x position values
 			switch (dir) {
 			case 0:

@@ -1,9 +1,8 @@
 package antgame;
 
 public class Ant {
-
 	int id;
-	int state = 0; // not sure
+	int state = 0; 
 	Color color;
 	int resting = 0;
 	int direction = 0;
@@ -13,30 +12,35 @@ public class Ant {
 	public Ant(int id, Color color) {
 		this.id = id;
 		this.color = color;
-
 	}
-
+	
+	//kill ant
 	public void setToDead() {
 		this.isAlive = false;
 	}
 
+	//change state
 	public void setState(int state) {
 		this.state = state;
 	}
 
+	//set resting
 	public void setResting(int resting) {
 		this.resting = resting;
 	}
 
+	//set direction
 	public void setDirection(int direction) {
-		assert(direction >= 0 && direction <= 5);
+		assert(direction >= 0 && direction <= 5);	//ensure dir is from 0-5
 		this.direction = direction;
 	}
-
+	
+	//set ant to have food *note: ants can only carry one food
 	public void setHasFood(boolean hasFood) {
 		this.hasFood = hasFood;
 	}
 
+	
 	public int getState() {
 		return state;
 	}
@@ -65,39 +69,34 @@ public class Ant {
 		return isAlive;
 	}
 
+	//method for turning the direction of the ant	
 	public int turn(Left_or_Right lr, int dir) {
-		// int dirToInt = 0;
-		// switch(dir){
-		// case Zero: dirToInt = 0;
-		// case One: dirToInt = 1;
-		// case Two: dirToInt = 2;
-		// case Three: dirToInt = 3;
-		// case Four: dirToInt = 4;
-		// case Five: dirToInt = 5;
-		// }
+		assert(direction >= 0 && direction <= 5);	//ensure dir is from 0-5
 
 		switch (lr) {
 		case LEFT:
-			return (dir + 5) % 6;
+			return (dir + 5) % 6;	//turn left
 		case RIGHT:
-			return (dir + 1) % 6;
+			return (dir + 1) % 6;	//turn right
 		}
-		throw new IllegalArgumentException();
+		
+		throw new IllegalArgumentException();	//should never get here
 
 	}
-
+	
+	//sense the cell in the direction that the ant is facing
 	public Position sensed_cell(Position pos, int dir, sense_dir sd) {
 		assert(dir >= 0 && dir <= 5);
 
 		switch (sd) {
 		case Here:
-			return pos;
+			return pos;		//cell ant is on now
 		case Ahead:
-			return pos.adjacent_cell(pos, dir);
+			return pos.adjacent_cell(pos, dir);		//cell the ant is facing with dir
 		case LeftAhead:
-			return pos.adjacent_cell(pos, turn(Left_or_Right.LEFT, dir));
+			return pos.adjacent_cell(pos, turn(Left_or_Right.LEFT, dir));	//cell to the left of faced direction
 		case RightAhead:
-			return pos.adjacent_cell(pos, turn(Left_or_Right.RIGHT, dir));
+			return pos.adjacent_cell(pos, turn(Left_or_Right.RIGHT, dir));	//cell to the right of faced direction
 		}
 		throw new IllegalArgumentException();
 	}

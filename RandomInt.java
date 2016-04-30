@@ -1,21 +1,25 @@
 package antgame;
 
-import java.util.Random;
+import java.util.Random;	//uses Random class from java
 
 public class RandomInt {
 	public RandomInt() {
 
 	}
-
 	
+	//paramaters take an int n for the number you want to return from 0 to n (inclusive)
+	//int seed to ensure dependability for tests
 	public int randomint(int n, int seed) {
 		Random r = new Random();
 		r.setSeed(seed);
 		return r.nextInt(n);	//returns from 0 to n inclusive. so maybe add +1 to n?
 		
 	}
+}
+	
+	
+	//HIS DIRECTIONS SD MADE NO SENSE, IF YOU WANT TO FIGURE IT OUT GO AHEAD!
 
-	// THIS METHOD DOES NOT WORK AS OF YET, NEED HELP!
 	// Could not get his math stuff to work
 	// instead just using Random java class
 
@@ -34,4 +38,3 @@ public class RandomInt {
 	// }
 	// }
 	// return xSeries % n;
-}

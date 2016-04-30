@@ -1,48 +1,99 @@
 package antgame;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 public class World {
 
-	static final int WORLDSIZE = 150;
-	private static Cell instance[][] = null;
+	static final int WORLDSIZE = 150; // maximum worldsize from requirements
+	private static Cell instance[][] = null; // global 2D Cell array
+
 	private World theOneAndOnly = null;
 	private int blackY;
 	private int blackX;
 
 	// there should only be one ever referred to
-	private World() {
+	// deciding to make it private
+	public World() {
 
 	}
 
+	// return cell in the 2D cell array
 	public Cell getCell(Position p) {
+		if (instance == null) { // checks if instance is valid and can be used
+			return null;
+		}
 		return instance[p.getX()][p.getY()];
 	}
 
 	public Cell[][] randomWorld() {
 		if (instance == null) {
-			int antID=0;
+
+			// System.out.println("hello");
+
+			// counter for numbering the ants
+			int antID = 0;
+			Ant antOnHill = null;
+			AntHillCell c = null;
+			ClearCell foodBlobUpperLeftCorner = null;
+			int foodX;
+			int foodY;
 
 			instance = new Cell[WORLDSIZE][WORLDSIZE];
+
+			// creating rocky border
 			for (int i = 0; i < WORLDSIZE; i++) {
 				instance[i][0] = new RockyCell(i, 0); // top
 				instance[i][WORLDSIZE - 1] = new RockyCell(i, WORLDSIZE - 1); // bottom
 				instance[0][i] = new RockyCell(0, i); // left side
 				instance[WORLDSIZE - 1][i] = new RockyCell(WORLDSIZE - 1, i); // right
-																				// side
 			}
 
-			// placing anthills randomly
-			antHillCreatorHelper();
+			// taking this out later but just initializing all cells to rock
 			for (int i = 0; i < WORLDSIZE; i++) {
-				for (int j = 0; i < WORLDSIZE; j++) {
-					if (instance[i][j].equals(AntHillCell.class)){
-						instance[i][j].setAnt();
-					}
+				for (int j = 0; j < WORLDSIZE; j++) {
+					instance[i][j] = new RockyCell(i, j);
 				}
 			}
+			// placing anthills randomly
+			// the parameter is the seed number
+			antHillCreatorHelper(0);
 
-		} else {
-			return instance;
+			// scans world left to right initializing ants on the antcells
+			// for (int i = 0; i < WORLDSIZE; i++) {
+			// for (int j = 0; j < WORLDSIZE; j++) {
+			// if (instance[i][j].equals(AntHillCell.class)){
+			// c = (AntHillCell) instance[i][j];
+			// if(c.getColor().equals(Color.RED)){
+			// antOnHill = new Ant(antID, Color.RED);
+			// c.setAnt(antOnHill);
+			// c.setAntExist();
+			// antID++;
+			// }else{
+			// antOnHill = new Ant(antID, Color.BLACK);
+			// c.setAnt(antOnHill);
+			// c.setAntExist();
+			// antID++;
+			// }
+			// }
+			// }
+			// }
+			//
+			// //11 food blob placements
+			//
+			//
+			//
+			// //random 14 RockyCells
+			//
+			//
+			//
+			//
+			// } else {
+			// return instance;
+			// }
+			return null;
 		}
+		return null;
 
 	}
 
@@ -50,15 +101,49 @@ public class World {
 
 	}
 
-	private void antHillCreatorHelper() {
+	public void visualWorld() throws FileNotFoundException {
+		int counter = 0;
+		PrintWriter out = new PrintWriter("text.txt");
+		for (int i = 0; i < WORLDSIZE; i++) {
+			for (int j = 0; j < WORLDSIZE; j++) {
+				if (instance[i][j].getIsRocky()) {
+					out.print("# ");
+					++counter;
+				} else if (instance[i][j].getIsAntHill()) {
+					out.print("* ");
+					++counter;
+				}else if(instance[i][j].getIsClear()){
+					out.print(". ");
+					++counter;
+				}
+				if (counter == WORLDSIZE) {
+					out.println();
+					counter = 0;
+				}
+
+			}
+		}
+		out.close();
+	}
+
+	private void antHillCreatorHelper(int seed) {
 		int blackX, blackY;
 		int redX, redY;
-
+		// random number generator
 		RandomInt r = new RandomInt();
-		redX = r.randomint(136, 1);
-		redY = r.randomint(136, 2);
-		blackX = r.randomint(136, 3);
-		blackY = r.randomint(136, 4);
+
+		// creates random int between 0 and 136
+		// then adds 7 to ensure anthill center is away from the wall
+		redX = r.randomint(136, seed + 1) + 7;
+		redY = r.randomint(136, seed + 2) + 7;
+		blackX = r.randomint(136, seed + 3) + 7;
+		blackY = r.randomint(136, seed + 4) + 7;
+		System.out.println(redX);
+		System.out.println(redY);
+		System.out.println(blackX);
+		System.out.println(blackY);
+
+		
 
 		if (redY % 2 == 0) {
 			for (int i = 0; i < 7; i++) {
