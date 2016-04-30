@@ -74,9 +74,9 @@ public class Ant {
 		assert(direction >= 0 && direction <= 5);	//ensure dir is from 0-5
 
 		switch (lr) {
-		case LEFT:
+		case Left:
 			return (dir + 5) % 6;	//turn left
-		case RIGHT:
+		case Right:
 			return (dir + 1) % 6;	//turn right
 		}
 		
@@ -94,9 +94,9 @@ public class Ant {
 		case Ahead:
 			return pos.adjacent_cell(pos, dir);		//cell the ant is facing with dir
 		case LeftAhead:
-			return pos.adjacent_cell(pos, turn(Left_or_Right.LEFT, dir));	//cell to the left of faced direction
+			return pos.adjacent_cell(pos, turn(Left_or_Right.Left, dir));	//cell to the left of faced direction
 		case RightAhead:
-			return pos.adjacent_cell(pos, turn(Left_or_Right.RIGHT, dir));	//cell to the right of faced direction
+			return pos.adjacent_cell(pos, turn(Left_or_Right.Right, dir));	//cell to the right of faced direction
 		}
 		throw new IllegalArgumentException();
 	}
