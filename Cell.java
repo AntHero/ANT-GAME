@@ -5,8 +5,10 @@ public class Cell {
 	Position position;
 	//initialized in every class so cell type info can be used by world class
 	Cell instance;		
-	//initialized in AntHillCell class so color can be accessed by  super
-	Color superColor;
+	//initialized in AntHillCell class so color can be accessed by super
+	Color superColor = null;
+	//initialized in ClearCell class so food access in super
+	int superFood = 0;
 
 	//returns position of cell
 	public Position getPosition() {
@@ -31,6 +33,10 @@ public class Cell {
 	//returns anthill color
 	public Color getHillColor() {
 		return superColor;
+	}
+	
+	public int getFoodAmount(){
+		return superFood;
 	}
 
 }

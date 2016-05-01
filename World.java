@@ -8,10 +8,6 @@ public class World {
 	static final int WORLDSIZE = 150; // maximum worldsize from requirements
 	private static Cell instance[][] = null; // global 2D Cell array
 
-	private World theOneAndOnly = null;
-	private int blackY;
-	private int blackX;
-
 	// there should only be one ever referred to
 	// deciding to make it private
 	public World() {
@@ -19,27 +15,24 @@ public class World {
 	}
 
 	// return cell in the 2D cell array
-	public Cell getCell(Position p) {
+	public Cell getCell(int x, int y) {
 		if (instance == null) { // checks if instance is valid and can be used
 			return null;
 		}
-		return instance[p.getX()][p.getY()];
+		return instance[x][y];
 	}
 
 	public Cell[][] randomWorld(int seed) {
 		if (instance == null) {
-
-			// System.out.println("hello");
-
-			// counter for numbering the ants
-			int antID = 0;
-			Ant antOnHill = null;
-			AntHillCell c = null;
-			ClearCell foodBlobUpperLeftCorner = null;
-			int foodX;
-			int foodY;
-
+			// initialize global variable instance
 			instance = new Cell[WORLDSIZE][WORLDSIZE];
+
+			// taking this out later but just initializing all cells to rock
+			for (int i = 0; i < WORLDSIZE; i++) {
+				for (int j = 0; j < WORLDSIZE; j++) {
+					instance[i][j] = null;
+				}
+			}
 
 			// creating rocky border
 			for (int i = 0; i < WORLDSIZE; i++) {
@@ -49,54 +42,29 @@ public class World {
 				instance[WORLDSIZE - 1][i] = new RockyCell(WORLDSIZE - 1, i); // right
 			}
 
-			// taking this out later but just initializing all cells to rock
-			for (int i = 0; i < WORLDSIZE; i++) {
-				for (int j = 0; j < WORLDSIZE; j++) {
-					instance[i][j] = new RockyCell(i, j);
-				}
-			}
 			// placing anthills randomly
 			// the parameter is the seed number
 			antHillCreatorHelper(seed);
+			// placing and IDing ants to antHillCells
+			 antIDMethod();
+			// placing 5x5 blobs of food
+			placeFoodBlobs(seed);
+			// place 14 random rocks
+			// placeRandomRocky(seed);
 
-			// scans world left to right initializing ants on the antcells
-			// i is the y axis
-//			for (int i = 0; i < WORLDSIZE; i++) {
-//				// j is the x axis
-//				for (int j = 0; j < WORLDSIZE; j++) {
-//
-//					if (instance[i][j].equals(AntHillCell.class)) {
-//						c = (AntHillCell) instance[i][j];
-//						if (c.getColor().equals(Color.RED)) {
-//							antOnHill = new Ant(antID, Color.RED);
-//							c.setAnt(antOnHill);
-//							c.setAntExist();
-//							antID++;
-//						} else {
-//							antOnHill = new Ant(antID, Color.BLACK);
-//							c.setAnt(antOnHill);
-//							c.setAntExist();
-//							antID++;
-//						}
-//					}
-//				}
-//			}
-			//
-			// //11 food blob placements
-			//
-			//
-			//
-			// //random 14 RockyCells
-			//
-			//
-			//
-			//
-			// } else {
-			// return instance;
-			// }
-			return null;
+			// fill in empty remaining cells with ClearCells
+			for (int i = 0; i < WORLDSIZE; i++) {
+				for (int j = 0; j < WORLDSIZE; j++) {
+					if (instance[i][j] == null) {
+						instance[i][j] = new ClearCell(i, j, 0);
+					}
+
+				}
+			}
+
+			return instance;
 		}
-		return null;
+		return instance;
 
 	}
 
@@ -115,6 +83,9 @@ public class World {
 				if (instance[j][i].getIsRocky()) {
 					out.print("# ");
 					++counter;
+					
+					
+					
 				} else if (instance[j][i].getIsAntHill()) {
 					if (instance[j][i].getHillColor().equals(Color.RED)) {
 						out.print("+ ");
@@ -123,8 +94,15 @@ public class World {
 					}
 					++counter;
 				} else if (instance[j][i].getIsClear()) {
-					out.print(". ");
+					if (instance[j][i].getFoodAmount() != 0) {
+						// out.print(instance[j][i].getFoodAmount());				
+						out.print("5 ");
+					} else {
+						out.print(". ");
+					}
 					++counter;
+				} else {
+					out.print("? ");
 				}
 				if (counter == WORLDSIZE) {
 					out.println();
@@ -136,22 +114,100 @@ public class World {
 		out.close();
 	}
 
-	private void antIDMethod() {		
+	private void placeRandomRocky(int seed) {
+		int rockyCounter = 0;
+		int rockySeed = seed + 100;
+		boolean freeCell = true;
+		int rockX = 0;
+		int rockY = 0;
+		RandomInt r = new RandomInt();
+		rockX = r.randomint(136, rockySeed) + 7;
+		rockY = r.randomint(136, rockySeed + 1) + 7;
+		rockyCounter += 2;
+
+		while (rockyCounter != 14) {
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					if (instance[rockX][rockY] != null) {
+						freeCell = false;
+					}
+				}
+			}
+
+			if (freeCell) {
+				for (int i = 0; i < 5; i++) {
+					for (int j = 0; j < 5; j++) {
+						instance[rockX][rockY] = new RockyCell(rockX, rockY);
+					}
+				}
+				rockyCounter++;
+			}
+			freeCell = true;
+
+		}
+
+	}
+
+	private void placeFoodBlobs(int seed) {
+		int blobCounter = 0;
+		int seedCounter = seed + 5;
+		boolean freeCells = true;
+
+		// Coordinate for upper left corner for 5x5 food blobs
+		int foodX = 0;
+		int foodY = 0;
+
+		RandomInt r = new RandomInt();
+
+		while (blobCounter < 5) {
+			foodX = r.randomint(136, seedCounter) + 7;
+			foodY = r.randomint(136, seedCounter + 1) + 7;
+			seedCounter += 2;
+
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					if (instance[foodX + i][foodY + j] != null) {
+						freeCells = false;
+					}
+				}
+			}
+
+			if (freeCells) {
+				for (int i = 0; i < 5; i++) {
+					for (int j = 0; j < 5; j++) {
+						instance[foodX + i][foodY + j] = new ClearCell(foodX, foodY, 5);
+					}
+				}
+				blobCounter++;
+			}
+			freeCells = true;
+		}
+	}
+	
+	//this method needs to come after all cells initiated
+	private void antIDMethod() {
 		Color cHolder;
-		int antID = 0;
+		int antID = 0; // check if i need to make this static
 		Ant antOnHill = null;
-		AntHillCell c = null;
-		ClearCell foodBlobUpperLeftCorner = null;
-		int foodX;
-		int foodY;
-		
-		
-		for (int i = 0; i < WORLDSIZE; i++) {			
+		ClearCell c = null;
+//		System.out.println(instance[1][1].getIsAntHill());
+
+		for (int i = 0; i < WORLDSIZE; i++) {
 			for (int j = 0; j < WORLDSIZE; j++) {
-				if(instance[i][j].getIsAntHill()){
+				System.out.println(i + " " + j);
+				if (instance[i][j].getIsAntHill()) {
+					// typecasting Cell to ClearCell
+					// saving it in local variable c
+					c = (ClearCell) instance[i][j];
+					// getting color
 					cHolder = instance[i][j].getHillColor();
+					// creating ant
 					antOnHill = new Ant(antID, cHolder);
-					
+					++antID;
+
+					// sets cell to have ant
+					c.setAntExist();
+					c.setAnt(antOnHill);
 				}
 			}
 		}

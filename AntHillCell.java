@@ -17,7 +17,7 @@ public class AntHillCell extends ClearCell {
 		super(x, y, food);
 		// this.ant = new Ant(id, color);
 		// id++;
-		this.color = ant.getColor();
+		this.color = color;
 		instance = this;	//needed for all Cell classes so super can access what type of cell it is in world
 		superColor = color;	//needed for super to find color of antHill
 							//you cant access subclasses from object *****Cell[][]

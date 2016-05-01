@@ -27,7 +27,9 @@ public class MainMethodTestingSuite {
 		World w = new World();
 		w.randomWorld(1);
 		w.visualWorld();
-		
+//		ClearCell c = (ClearCell)w.getCell(131,63);
+//		System.out.println(c.hasAnt());
+//		System.out.println(c.getAnt().getId());
 		
 		
 	}

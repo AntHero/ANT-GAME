@@ -16,6 +16,7 @@ public class ClearCell extends Cell {
 		this.food = food;
 		this.position = new Position(x, y);
 		instance = this;
+		superFood = food;
 	}
 
 	// ant is no longer on the cell
