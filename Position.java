@@ -19,7 +19,7 @@ public class Position {
 	}
 	
 	//takes Position and Direction parameters to return the adjacent(directly in front) position of current position
-	public Position adjacent_cell(Position pos, int dir) {
+	public Position adjacentCell(Position pos, int dir) {
 		assert(dir>=0 && dir<=5);
 		//local variables for the Position
 		int x = pos.getX();

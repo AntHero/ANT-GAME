@@ -92,11 +92,11 @@ public class Ant {
 		case Here:
 			return pos;		//cell ant is on now
 		case Ahead:
-			return pos.adjacent_cell(pos, dir);		//cell the ant is facing with dir
+			return pos.adjacentCell(pos, dir);		//cell the ant is facing with dir
 		case LeftAhead:
-			return pos.adjacent_cell(pos, turn(Left_or_Right.Left, dir));	//cell to the left of faced direction
+			return pos.adjacentCell(pos, turn(Left_or_Right.Left, dir));	//cell to the left of faced direction
 		case RightAhead:
-			return pos.adjacent_cell(pos, turn(Left_or_Right.Right, dir));	//cell to the right of faced direction
+			return pos.adjacentCell(pos, turn(Left_or_Right.Right, dir));	//cell to the right of faced direction
 		}
 		throw new IllegalArgumentException();
 	}

@@ -446,4 +446,22 @@ public class World {
 			checkForSurroundedAntAt(pos.adjacentCell(pos, dir));
 		}		
 	}
+	
+	public void step(int antID){
+		
+		if (antIsAlive(antID)){
+			Position p = findAnt(antID);
+			Ant a = antAt(p);
+			
+			if (a.getResting() > 0){
+				a.setResting(a.getResting()-1);				
+			}else{
+				
+			}
+			
+			
+		}
+	}
+	
+	
 }
