@@ -3,14 +3,15 @@ package antgame;
 import java.util.Random;	//uses Random class from java
 
 public class RandomInt {
+	Random r = new Random();
+	
 	public RandomInt() {
 
 	}
 	
 	//paramaters take an int n for the number you want to return from 0 to n (inclusive)
 	//int seed to ensure dependability for tests
-	public int randomint(int n, int seed) {
-		Random r = new Random();
+	public int randomInteger(int n, int seed) {		
 		r.setSeed(seed);
 		return r.nextInt(n);	//returns from 0 to n inclusive. so maybe add +1 to n?
 		

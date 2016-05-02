@@ -1,17 +1,20 @@
 package antgame;
-
+/*
+ * @author Arcooo
+ */
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.Random;
 
 public class World {
-
 	static final int WORLDSIZE = 150; // maximum worldsize from requirements
 	private static Cell instance[][] = null; // global 2D Cell array
+	//global variables to keep track of center of first anthill (RED)
+	private int AntHillX = -1;
+	private int AntHillY = -1;
 
-	// there should only be one ever referred to
-	// deciding to make it private
+	//constructor
 	public World() {
-
 	}
 
 	// return cell in the 2D cell array
@@ -22,46 +25,34 @@ public class World {
 		return instance[x][y];
 	}
 
+	//Creates a randomWorld
 	public Cell[][] randomWorld(int seed) {
 		if (instance == null) {
 			// initialize global variable instance
 			instance = new Cell[WORLDSIZE][WORLDSIZE];
-
-			// taking this out later but just initializing all cells to rock
-			for (int i = 0; i < WORLDSIZE; i++) {
-				for (int j = 0; j < WORLDSIZE; j++) {
-					instance[i][j] = null;
-				}
-			}
+			
+			//Random class to get random integers
+			Random r = new Random();
+			r.setSeed(seed);
 
 			// creating rocky border
-			for (int i = 0; i < WORLDSIZE; i++) {
-				instance[i][0] = new RockyCell(i, 0); // top
-				instance[i][WORLDSIZE - 1] = new RockyCell(i, WORLDSIZE - 1); // bottom
-				instance[0][i] = new RockyCell(0, i); // left side
-				instance[WORLDSIZE - 1][i] = new RockyCell(WORLDSIZE - 1, i); // right
-			}
+			createRockyBorder();
 
-			// placing anthills randomly
-			// the parameter is the seed number
-			antHillCreatorHelper(seed);
-			// placing and IDing ants to antHillCells
-			 antIDMethod();
+			// place the red anthill
+			antHillCreatorHelper(r.nextInt(), r.nextInt(), Color.RED);
+			// place the black anthill
+			antHillCreatorHelper(r.nextInt(), r.nextInt(), Color.BLACK);
+
 			// placing 5x5 blobs of food
-			placeFoodBlobs(seed);
+			placeFoodBlobs(r.nextInt());
 			// place 14 random rocks
-			// placeRandomRocky(seed);
+			placeRandomRocky(r.nextInt());
 
 			// fill in empty remaining cells with ClearCells
-			for (int i = 0; i < WORLDSIZE; i++) {
-				for (int j = 0; j < WORLDSIZE; j++) {
-					if (instance[i][j] == null) {
-						instance[i][j] = new ClearCell(i, j, 0);
-					}
+			fillWithClear();
 
-				}
-			}
-
+			// placing and IDing ants to antHillCells
+			antIDMethod();
 			return instance;
 		}
 		return instance;
@@ -72,82 +63,112 @@ public class World {
 
 	}
 
-	public void visualWorld() throws FileNotFoundException {
-		int counter = 0;
-		PrintWriter out = new PrintWriter("text.txt");
-
-		// i is the y axis due to how printing works
+	// creates rocky border
+	private void createRockyBorder() {
 		for (int i = 0; i < WORLDSIZE; i++) {
-			// j is the x axis
-			for (int j = 0; j < WORLDSIZE; j++) {
-				if (instance[j][i].getIsRocky()) {
-					out.print("# ");
-					++counter;
-					
-					
-					
-				} else if (instance[j][i].getIsAntHill()) {
-					if (instance[j][i].getHillColor().equals(Color.RED)) {
-						out.print("+ ");
-					} else {
-						out.print("- ");
-					}
-					++counter;
-				} else if (instance[j][i].getIsClear()) {
-					if (instance[j][i].getFoodAmount() != 0) {
-						// out.print(instance[j][i].getFoodAmount());				
-						out.print("5 ");
-					} else {
-						out.print(". ");
-					}
-					++counter;
-				} else {
-					out.print("? ");
-				}
-				if (counter == WORLDSIZE) {
-					out.println();
-					counter = 0;
-				}
-
-			}
+			instance[i][0] = new RockyCell(i, 0); // top
+			instance[i][WORLDSIZE - 1] = new RockyCell(i, WORLDSIZE - 1); // bottom
+			instance[0][i] = new RockyCell(0, i); // left side
+			instance[WORLDSIZE - 1][i] = new RockyCell(WORLDSIZE - 1, i); // right
 		}
-		out.close();
 	}
+	
+	//creates anthills
+	private void antHillCreatorHelper(int seedX, int seedY, Color col) {
+		int xCoord, yCoord;
 
-	private void placeRandomRocky(int seed) {
-		int rockyCounter = 0;
-		int rockySeed = seed + 100;
-		boolean freeCell = true;
-		int rockX = 0;
-		int rockY = 0;
+		// random number generator
 		RandomInt r = new RandomInt();
-		rockX = r.randomint(136, rockySeed) + 7;
-		rockY = r.randomint(136, rockySeed + 1) + 7;
-		rockyCounter += 2;
 
-		while (rockyCounter != 14) {
-			for (int i = 0; i < 5; i++) {
-				for (int j = 0; j < 5; j++) {
-					if (instance[rockX][rockY] != null) {
-						freeCell = false;
-					}
-				}
-			}
+		// creates random int between 0 and 136
+		// then adds 7 to ensure anthill center is away from the wall
+		xCoord = r.randomInteger(136, seedX) + 7;
+		yCoord = r.randomInteger(136, seedY) + 7;
 
-			if (freeCell) {
-				for (int i = 0; i < 5; i++) {
-					for (int j = 0; j < 5; j++) {
-						instance[rockX][rockY] = new RockyCell(rockX, rockY);
-					}
-				}
-				rockyCounter++;
-			}
-			freeCell = true;
-
+		//checks if the second anthill overlaps the first
+		while (xCoord < (AntHillX + 7) && xCoord > (AntHillX - 7)) {
+			xCoord = r.randomInteger(136, seedX * 3) + 7;
 		}
+		while (yCoord < (AntHillY + 7) && yCoord > (AntHillY - 7)) {
+			yCoord = r.randomInteger(136, seedY * 5) + 7;
+		}
+		
+		//saves the center of the anthill as a global variable
+		AntHillX = xCoord;
+		AntHillY = yCoord;
 
+		//if y coordinate is even
+		if (yCoord % 2 == 0) {
+			for (int i = 0; i < 7; i++) {
+				instance[xCoord - 3 + i][yCoord - 6] = new AntHillCell(xCoord - 3 + i, yCoord - 6, 0, col);
+				instance[xCoord - 3 + i][yCoord + 6] = new AntHillCell(xCoord - 3 + i, yCoord + 6, 0, col);
+			}
+			for (int i = 0; i < 8; i++) {
+				instance[xCoord - 3 + i][yCoord - 5] = new AntHillCell(xCoord - 3 + i, yCoord - 5, 0, col);
+				instance[xCoord - 3 + i][yCoord + 5] = new AntHillCell(xCoord - 3 + i, yCoord + 5, 0, col);
+
+			}
+			for (int i = 0; i < 9; i++) {
+				instance[xCoord - 4 + i][yCoord - 4] = new AntHillCell(xCoord - 4 + i, yCoord - 4, 0, col);
+				instance[xCoord - 4 + i][yCoord + 4] = new AntHillCell(xCoord - 4 + i, yCoord + 4, 0, col);
+
+			}
+			for (int i = 0; i < 10; i++) {
+				instance[xCoord - 4 + i][yCoord - 3] = new AntHillCell(xCoord - 4 + i, yCoord - 3, 0, col);
+				instance[xCoord - 4 + i][yCoord + 3] = new AntHillCell(xCoord - 4 + i, yCoord + 3, 0, col);
+
+			}
+			for (int i = 0; i < 11; i++) {
+				instance[xCoord - 5 + i][yCoord - 2] = new AntHillCell(xCoord - 5 + i, yCoord - 2, 0, col);
+				instance[xCoord - 5 + i][yCoord + 2] = new AntHillCell(xCoord - 5 + i, yCoord + 2, 0, col);
+
+			}
+			for (int i = 0; i < 12; i++) {
+				instance[xCoord - 5 + i][yCoord - 1] = new AntHillCell(xCoord - 5 + i, yCoord - 1, 0, col);
+				instance[xCoord - 5 + i][yCoord + 1] = new AntHillCell(xCoord - 5 + i, yCoord + 1, 0, col);
+
+			}
+			for (int i = 0; i < 13; i++) {
+				instance[xCoord - 6 + i][yCoord] = new AntHillCell(xCoord - 6 + i, yCoord, 0, col);
+			}
+		//if y coordinate is even
+		} else {
+			for (int i = 0; i < 7; i++) {
+				instance[xCoord - 3 + i][yCoord - 6] = new AntHillCell(xCoord - 3 + i, yCoord - 6, 0, col);
+				instance[xCoord - 3 + i][yCoord + 6] = new AntHillCell(xCoord - 3 + i, yCoord + 6, 0, col);
+			}
+			for (int i = 0; i < 8; i++) {
+				instance[xCoord - 4 + i][yCoord - 5] = new AntHillCell(xCoord - 4 + i, yCoord - 5, 0, col);
+				instance[xCoord - 4 + i][yCoord + 5] = new AntHillCell(xCoord - 4 + i, yCoord + 5, 0, col);
+
+			}
+			for (int i = 0; i < 9; i++) {
+				instance[xCoord - 4 + i][yCoord - 4] = new AntHillCell(xCoord - 4 + i, yCoord - 4, 0, col);
+				instance[xCoord - 4 + i][yCoord + 4] = new AntHillCell(xCoord - 4 + i, yCoord + 4, 0, col);
+
+			}
+			for (int i = 0; i < 10; i++) {
+				instance[xCoord - 5 + i][yCoord - 3] = new AntHillCell(xCoord - 5 + i, yCoord - 3, 0, col);
+				instance[xCoord - 5 + i][yCoord + 3] = new AntHillCell(xCoord - 5 + i, yCoord + 3, 0, col);
+
+			}
+			for (int i = 0; i < 11; i++) {
+				instance[xCoord - 5 + i][yCoord - 2] = new AntHillCell(xCoord - 5 + i, yCoord - 2, 0, col);
+				instance[xCoord - 5 + i][yCoord + 2] = new AntHillCell(xCoord - 5 + i, yCoord + 2, 0, col);
+
+			}
+			for (int i = 0; i < 12; i++) {
+				instance[xCoord - 6 + i][yCoord - 1] = new AntHillCell(xCoord - 6 + i, yCoord - 1, 0, col);
+				instance[xCoord - 6 + i][yCoord + 1] = new AntHillCell(xCoord - 6 + i, yCoord + 1, 0, col);
+
+			}
+			for (int i = 0; i < 13; i++) {
+				instance[xCoord - 6 + i][yCoord] = new AntHillCell(xCoord - 6 + i, yCoord, 0, col);
+			}
+		}
 	}
 
+	//places 5 5x5 food blobs randomly
 	private void placeFoodBlobs(int seed) {
 		int blobCounter = 0;
 		int seedCounter = seed + 5;
@@ -160,8 +181,8 @@ public class World {
 		RandomInt r = new RandomInt();
 
 		while (blobCounter < 5) {
-			foodX = r.randomint(136, seedCounter) + 7;
-			foodY = r.randomint(136, seedCounter + 1) + 7;
+			foodX = r.randomInteger(136, seedCounter*3) + 7;
+			foodY = r.randomInteger(136, seedCounter*4) + 7;
 			seedCounter += 2;
 
 			for (int i = 0; i < 5; i++) {
@@ -183,18 +204,54 @@ public class World {
 			freeCells = true;
 		}
 	}
-	
-	//this method needs to come after all cells initiated
+
+	//places 14 single random rocky cells
+	private void placeRandomRocky(int seed) {
+		int rockyCounter = 0;
+		int rockySeed = seed + 100;
+		boolean freeCell = true;
+		int rockX = 0;
+		int rockY = 0;
+		RandomInt r = new RandomInt();
+
+		while (rockyCounter != 14) {
+			rockX = r.randomInteger(136, rockySeed*3) + 7;
+			rockY = r.randomInteger(136, rockySeed*4) + 7;
+			rockySeed += 2;
+			if (instance[rockX][rockY] != null) {
+				freeCell = false;
+			}
+			if (freeCell) {
+				// System.out.println(rockX + " " + rockY);
+				instance[rockX][rockY] = new RockyCell(rockX, rockY);
+			}
+			rockyCounter++;
+			freeCell = true;
+		}
+	}
+
+	//fills instance (the 2D Cell array) with clear cells
+	private void fillWithClear() {
+		for (int i = 0; i < WORLDSIZE; i++) {
+			for (int j = 0; j < WORLDSIZE; j++) {
+				if (instance[i][j] == null) {
+					instance[i][j] = new ClearCell(i, j, 0);
+				}
+			}
+		}
+	}
+
+	// this method needs to come after all cells initiated
 	private void antIDMethod() {
 		Color cHolder;
 		int antID = 0; // check if i need to make this static
 		Ant antOnHill = null;
 		ClearCell c = null;
-//		System.out.println(instance[1][1].getIsAntHill());
+		// System.out.println(instance[1][1].getIsAntHill());
 
 		for (int i = 0; i < WORLDSIZE; i++) {
 			for (int j = 0; j < WORLDSIZE; j++) {
-				System.out.println(i + " " + j);
+				// System.out.println(i + " " + j);
 				if (instance[i][j].getIsAntHill()) {
 					// typecasting Cell to ClearCell
 					// saving it in local variable c
@@ -213,159 +270,43 @@ public class World {
 		}
 	}
 
-	private void antHillCreatorHelper(int seed) {
-		int blackX, blackY;
-		int redX, redY;
-		// random number generator
-		RandomInt r = new RandomInt();
+	//creates a visual text file to see the world
+	public void visualWorld() throws FileNotFoundException {
+		int counter = 0;
+		PrintWriter out = new PrintWriter("text.txt");
 
-		// creates random int between 0 and 136
-		// then adds 7 to ensure anthill center is away from the wall
-		redX = r.randomint(136, seed + 1) + 7;
-		redY = r.randomint(136, seed + 2) + 7;
-		blackX = r.randomint(136, seed + 3) + 7;
-		blackY = r.randomint(136, seed + 4) + 7;
+		// i is the y axis due to how printing works
+		for (int i = 0; i < WORLDSIZE; i++) {
+			// j is the x axis
+			for (int j = 0; j < WORLDSIZE; j++) {
+				if (instance[j][i].getIsRocky()) {
+					out.print("# ");
+					++counter;
 
-		// for testing
-		System.out.println(redX);
-		System.out.println(redY);
-		System.out.println(blackX);
-		System.out.println(blackY);
-
-		if (redY % 2 == 0) {
-			for (int i = 0; i < 7; i++) {
-				instance[redX - 3 + i][redY - 6] = new AntHillCell(redX - 3 + i, redY - 6, 0, Color.RED);
-				instance[redX - 3 + i][redY + 6] = new AntHillCell(redX - 3 + i, redY + 6, 0, Color.RED);
-			}
-			for (int i = 0; i < 8; i++) {
-				instance[redX - 3 + i][redY - 5] = new AntHillCell(redX - 3 + i, redY - 5, 0, Color.RED);
-				instance[redX - 3 + i][redY + 5] = new AntHillCell(redX - 3 + i, redY + 5, 0, Color.RED);
-
-			}
-			for (int i = 0; i < 9; i++) {
-				instance[redX - 4 + i][redY - 4] = new AntHillCell(redX - 4 + i, redY - 4, 0, Color.RED);
-				instance[redX - 4 + i][redY + 4] = new AntHillCell(redX - 4 + i, redY + 4, 0, Color.RED);
-
-			}
-			for (int i = 0; i < 10; i++) {
-				instance[redX - 4 + i][redY - 3] = new AntHillCell(redX - 4 + i, redY - 3, 0, Color.RED);
-				instance[redX - 4 + i][redY + 3] = new AntHillCell(redX - 4 + i, redY + 3, 0, Color.RED);
-
-			}
-			for (int i = 0; i < 11; i++) {
-				instance[redX - 5 + i][redY - 2] = new AntHillCell(redX - 5 + i, redY - 2, 0, Color.RED);
-				instance[redX - 5 + i][redY + 2] = new AntHillCell(redX - 5 + i, redY + 2, 0, Color.RED);
-
-			}
-			for (int i = 0; i < 12; i++) {
-				instance[redX - 5 + i][redY - 1] = new AntHillCell(redX - 5 + i, redY - 1, 0, Color.RED);
-				instance[redX - 5 + i][redY + 1] = new AntHillCell(redX - 5 + i, redY + 1, 0, Color.RED);
-
-			}
-			for (int i = 0; i < 13; i++) {
-				instance[redX - 6 + i][redY] = new AntHillCell(redX - 6 + i, redY, 0, Color.RED);
-			}
-		} else {
-			for (int i = 0; i < 7; i++) {
-				instance[redX - 3 + i][redY - 6] = new AntHillCell(redX - 3 + i, redY - 6, 0, Color.RED);
-				instance[redX - 3 + i][redY + 6] = new AntHillCell(redX - 3 + i, redY + 6, 0, Color.RED);
-			}
-			for (int i = 0; i < 8; i++) {
-				instance[redX - 4 + i][redY - 5] = new AntHillCell(redX - 4 + i, redY - 5, 0, Color.RED);
-				instance[redX - 4 + i][redY + 5] = new AntHillCell(redX - 4 + i, redY + 5, 0, Color.RED);
-
-			}
-			for (int i = 0; i < 9; i++) {
-				instance[redX - 4 + i][redY - 4] = new AntHillCell(redX - 4 + i, redY - 4, 0, Color.RED);
-				instance[redX - 4 + i][redY + 4] = new AntHillCell(redX - 4 + i, redY + 4, 0, Color.RED);
-
-			}
-			for (int i = 0; i < 10; i++) {
-				instance[redX - 5 + i][redY - 3] = new AntHillCell(redX - 5 + i, redY - 3, 0, Color.RED);
-				instance[redX - 5 + i][redY + 3] = new AntHillCell(redX - 5 + i, redY + 3, 0, Color.RED);
-
-			}
-			for (int i = 0; i < 11; i++) {
-				instance[redX - 5 + i][redY - 2] = new AntHillCell(redX - 5 + i, redY - 2, 0, Color.RED);
-				instance[redX - 5 + i][redY + 2] = new AntHillCell(redX - 5 + i, redY + 2, 0, Color.RED);
-
-			}
-			for (int i = 0; i < 12; i++) {
-				instance[redX - 6 + i][redY - 1] = new AntHillCell(redX - 6 + i, redY - 1, 0, Color.RED);
-				instance[redX - 6 + i][redY + 1] = new AntHillCell(redX - 6 + i, redY + 1, 0, Color.RED);
-
-			}
-			for (int i = 0; i < 13; i++) {
-				instance[redX - 6 + i][redY] = new AntHillCell(redX - 6 + i, redY, 0, Color.RED);
+				} else if (instance[j][i].getIsAntHill()) {
+					if (instance[j][i].getHillColor().equals(Color.RED)) {
+						out.print("+ ");
+					} else {
+						out.print("- ");
+					}
+					++counter;
+				} else if (instance[j][i].getIsClear()) {
+					if (instance[j][i].getFoodAmount() != 0) {
+						 out.print(instance[j][i].getFoodAmount() + " ");
+//						out.print("5 ");
+					} else {
+						out.print(". ");
+					}
+					++counter;
+				} else {
+					out.print("? ");
+				}
+				if (counter == WORLDSIZE) {
+					out.println();
+					counter = 0;
+				}
 			}
 		}
-
-		if (blackY % 2 == 0) {
-			for (int i = 0; i < 7; i++) {
-				instance[blackX - 3 + i][blackY - 6] = new AntHillCell(blackX - 3 + i, blackY - 6, 0, Color.BLACK);
-				instance[blackX - 3 + i][blackY + 6] = new AntHillCell(blackX - 3 + i, blackY + 6, 0, Color.BLACK);
-			}
-			for (int i = 0; i < 8; i++) {
-				instance[blackX - 3 + i][blackY - 5] = new AntHillCell(blackX - 3 + i, blackY - 5, 0, Color.BLACK);
-				instance[blackX - 3 + i][blackY + 5] = new AntHillCell(blackX - 3 + i, blackY + 5, 0, Color.BLACK);
-
-			}
-			for (int i = 0; i < 9; i++) {
-				instance[blackX - 4 + i][blackY - 4] = new AntHillCell(blackX - 4 + i, blackY - 4, 0, Color.BLACK);
-				instance[blackX - 4 + i][blackY + 4] = new AntHillCell(blackX - 4 + i, blackY + 4, 0, Color.BLACK);
-
-			}
-			for (int i = 0; i < 10; i++) {
-				instance[blackX - 4 + i][blackY - 3] = new AntHillCell(blackX - 4 + i, blackY - 3, 0, Color.BLACK);
-				instance[blackX - 4 + i][blackY + 3] = new AntHillCell(blackX - 4 + i, blackY + 3, 0, Color.BLACK);
-
-			}
-			for (int i = 0; i < 11; i++) {
-				instance[blackX - 5 + i][blackY - 2] = new AntHillCell(blackX - 5 + i, blackY - 2, 0, Color.BLACK);
-				instance[blackX - 5 + i][blackY + 2] = new AntHillCell(blackX - 5 + i, blackY + 2, 0, Color.BLACK);
-
-			}
-			for (int i = 0; i < 12; i++) {
-				instance[blackX - 5 + i][blackY - 1] = new AntHillCell(blackX - 5 + i, blackY - 1, 0, Color.BLACK);
-				instance[blackX - 5 + i][blackY + 1] = new AntHillCell(blackX - 5 + i, blackY + 1, 0, Color.BLACK);
-
-			}
-			for (int i = 0; i < 13; i++) {
-				instance[blackX - 6 + i][blackY] = new AntHillCell(blackX - 6 + i, blackY, 0, Color.BLACK);
-			}
-		} else {
-			for (int i = 0; i < 7; i++) {
-				instance[blackX - 3 + i][blackY - 6] = new AntHillCell(blackX - 3 + i, blackY - 6, 0, Color.BLACK);
-				instance[blackX - 3 + i][blackY + 6] = new AntHillCell(blackX - 3 + i, blackY + 6, 0, Color.BLACK);
-			}
-			for (int i = 0; i < 8; i++) {
-				instance[blackX - 4 + i][blackY - 5] = new AntHillCell(blackX - 4 + i, blackY - 5, 0, Color.BLACK);
-				instance[blackX - 4 + i][blackY + 5] = new AntHillCell(blackX - 4 + i, blackY + 5, 0, Color.BLACK);
-
-			}
-			for (int i = 0; i < 9; i++) {
-				instance[blackX - 4 + i][blackY - 4] = new AntHillCell(blackX - 4 + i, blackY - 4, 0, Color.BLACK);
-				instance[blackX - 4 + i][blackY + 4] = new AntHillCell(blackX - 4 + i, blackY + 4, 0, Color.BLACK);
-
-			}
-			for (int i = 0; i < 10; i++) {
-				instance[blackX - 5 + i][blackY - 3] = new AntHillCell(blackX - 5 + i, blackY - 3, 0, Color.BLACK);
-				instance[blackX - 5 + i][blackY + 3] = new AntHillCell(blackX - 5 + i, blackY + 3, 0, Color.BLACK);
-
-			}
-			for (int i = 0; i < 11; i++) {
-				instance[blackX - 5 + i][blackY - 2] = new AntHillCell(blackX - 5 + i, blackY - 2, 0, Color.BLACK);
-				instance[blackX - 5 + i][blackY + 2] = new AntHillCell(blackX - 5 + i, blackY + 2, 0, Color.BLACK);
-
-			}
-			for (int i = 0; i < 12; i++) {
-				instance[blackX - 6 + i][blackY - 1] = new AntHillCell(blackX - 6 + i, blackY - 1, 0, Color.BLACK);
-				instance[blackX - 6 + i][blackY + 1] = new AntHillCell(blackX - 6 + i, blackY + 1, 0, Color.BLACK);
-
-			}
-			for (int i = 0; i < 13; i++) {
-				instance[blackX - 6 + i][blackY] = new AntHillCell(blackX - 6 + i, blackY, 0, Color.BLACK);
-			}
-		}
+		out.close();
 	}
 }

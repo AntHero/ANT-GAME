@@ -23,9 +23,12 @@ public class MainMethodTestingSuite {
 //		Random r = new Random();
 //		r.setSeed(10);
 //		System.out.println(r.nextInt(100));
+//		System.out.println(r.nextInt(100));
+//		System.out.println(r.nextInt(100));
+//		System.out.println(r.nextInt(100));
 		
 		World w = new World();
-		w.randomWorld(1);
+		w.randomWorld(0);
 		w.visualWorld();
 //		ClearCell c = (ClearCell)w.getCell(131,63);
 //		System.out.println(c.hasAnt());
