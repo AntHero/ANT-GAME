@@ -1,4 +1,5 @@
 package antgame;
+
 /*
  * @author Arcooo
  */
@@ -9,11 +10,11 @@ import java.util.Random;
 public class World {
 	static final int WORLDSIZE = 150; // maximum worldsize from requirements
 	private static Cell instance[][] = null; // global 2D Cell array
-	//global variables to keep track of center of first anthill (RED)
+	// global variables to keep track of center of first anthill (RED)
 	private int AntHillX = -1;
 	private int AntHillY = -1;
 
-	//constructor
+	// constructor
 	public World() {
 	}
 
@@ -25,13 +26,13 @@ public class World {
 		return instance[x][y];
 	}
 
-	//Creates a randomWorld
+	// Creates a randomWorld
 	public Cell[][] randomWorld(int seed) {
 		if (instance == null) {
 			// initialize global variable instance
 			instance = new Cell[WORLDSIZE][WORLDSIZE];
-			
-			//Random class to get random integers
+
+			// Random class to get random integers
 			Random r = new Random();
 			r.setSeed(seed);
 
@@ -59,7 +60,7 @@ public class World {
 
 	}
 
-	private void premadeWorld() {
+	public void premadeWorld() {
 
 	}
 
@@ -72,8 +73,8 @@ public class World {
 			instance[WORLDSIZE - 1][i] = new RockyCell(WORLDSIZE - 1, i); // right
 		}
 	}
-	
-	//creates anthills
+
+	// creates anthills
 	private void antHillCreatorHelper(int seedX, int seedY, Color col) {
 		int xCoord, yCoord;
 
@@ -85,19 +86,19 @@ public class World {
 		xCoord = r.randomInteger(136, seedX) + 7;
 		yCoord = r.randomInteger(136, seedY) + 7;
 
-		//checks if the second anthill overlaps the first
+		// checks if the second anthill overlaps the first
 		while (xCoord < (AntHillX + 7) && xCoord > (AntHillX - 7)) {
 			xCoord = r.randomInteger(136, seedX * 3) + 7;
 		}
 		while (yCoord < (AntHillY + 7) && yCoord > (AntHillY - 7)) {
 			yCoord = r.randomInteger(136, seedY * 5) + 7;
 		}
-		
-		//saves the center of the anthill as a global variable
+
+		// saves the center of the anthill as a global variable
 		AntHillX = xCoord;
 		AntHillY = yCoord;
 
-		//if y coordinate is even
+		// if y coordinate is even
 		if (yCoord % 2 == 0) {
 			for (int i = 0; i < 7; i++) {
 				instance[xCoord - 3 + i][yCoord - 6] = new AntHillCell(xCoord - 3 + i, yCoord - 6, 0, col);
@@ -131,7 +132,7 @@ public class World {
 			for (int i = 0; i < 13; i++) {
 				instance[xCoord - 6 + i][yCoord] = new AntHillCell(xCoord - 6 + i, yCoord, 0, col);
 			}
-		//if y coordinate is even
+			// if y coordinate is even
 		} else {
 			for (int i = 0; i < 7; i++) {
 				instance[xCoord - 3 + i][yCoord - 6] = new AntHillCell(xCoord - 3 + i, yCoord - 6, 0, col);
@@ -168,7 +169,7 @@ public class World {
 		}
 	}
 
-	//places 5 5x5 food blobs randomly
+	// places 5 5x5 food blobs randomly
 	private void placeFoodBlobs(int seed) {
 		int blobCounter = 0;
 		int seedCounter = seed + 5;
@@ -181,8 +182,8 @@ public class World {
 		RandomInt r = new RandomInt();
 
 		while (blobCounter < 5) {
-			foodX = r.randomInteger(136, seedCounter*3) + 7;
-			foodY = r.randomInteger(136, seedCounter*4) + 7;
+			foodX = r.randomInteger(136, seedCounter * 3) + 7;
+			foodY = r.randomInteger(136, seedCounter * 4) + 7;
 			seedCounter += 2;
 
 			for (int i = 0; i < 5; i++) {
@@ -205,7 +206,7 @@ public class World {
 		}
 	}
 
-	//places 14 single random rocky cells
+	// places 14 single random rocky cells
 	private void placeRandomRocky(int seed) {
 		int rockyCounter = 0;
 		int rockySeed = seed + 100;
@@ -215,8 +216,8 @@ public class World {
 		RandomInt r = new RandomInt();
 
 		while (rockyCounter != 14) {
-			rockX = r.randomInteger(136, rockySeed*3) + 7;
-			rockY = r.randomInteger(136, rockySeed*4) + 7;
+			rockX = r.randomInteger(136, rockySeed * 3) + 7;
+			rockY = r.randomInteger(136, rockySeed * 4) + 7;
 			rockySeed += 2;
 			if (instance[rockX][rockY] != null) {
 				freeCell = false;
@@ -230,7 +231,7 @@ public class World {
 		}
 	}
 
-	//fills instance (the 2D Cell array) with clear cells
+	// fills instance (the 2D Cell array) with clear cells
 	private void fillWithClear() {
 		for (int i = 0; i < WORLDSIZE; i++) {
 			for (int j = 0; j < WORLDSIZE; j++) {
@@ -263,14 +264,14 @@ public class World {
 					++antID;
 
 					// sets cell to have ant
-					c.setAntExist();
+					c.setHasAnt();
 					c.setAnt(antOnHill);
 				}
 			}
 		}
 	}
 
-	//creates a visual text file to see the world
+	// creates a visual text file to see the world
 	public void visualWorld() throws FileNotFoundException {
 		int counter = 0;
 		PrintWriter out = new PrintWriter("text.txt");
@@ -292,8 +293,8 @@ public class World {
 					++counter;
 				} else if (instance[j][i].getIsClear()) {
 					if (instance[j][i].getFoodAmount() != 0) {
-						 out.print(instance[j][i].getFoodAmount() + " ");
-//						out.print("5 ");
+						out.print(instance[j][i].getFoodAmount() + " ");
+						// out.print("5 ");
 					} else {
 						out.print(". ");
 					}
@@ -308,5 +309,141 @@ public class World {
 			}
 		}
 		out.close();
+	}
+	
+	public boolean someAntAt(Position p){
+		ClearCell cc;
+		if (instance == null) {
+			throw new NullPointerException("World not constructed");
+		} else {
+			if(instance[p.getX()][p.getY()].getIsClear()){
+				cc = (ClearCell)instance[p.getX()][p.getY()];
+				return cc.hasAnt();
+			}
+		}
+		return false;	//never should get here
+	}
+	
+	public Ant antAt(Position p){
+		ClearCell cc;
+		if (instance == null) {
+			throw new NullPointerException("World not constructed");
+		} else {
+			if(instance[p.getX()][p.getY()].getIsClear()){
+				cc = (ClearCell)instance[p.getX()][p.getY()];
+				return cc.getAnt();
+			}
+		}
+		return null;
+	}
+	
+	public void setAntAt(Position p, Ant a){
+		ClearCell cc;
+		if (instance == null) {
+			throw new NullPointerException("World not constructed");
+		} else {
+			if(instance[p.getX()][p.getY()].getIsClear() || instance[p.getX()][p.getY()].getIsAntHill()){
+				cc = (ClearCell)instance[p.getX()][p.getY()];
+				cc.setAnt(a);
+				cc.setHasAnt();			
+			}
+		}	
+	}
+	
+	public void clearAntAt(Position p){
+		ClearCell cc;
+		if (instance == null) {
+			throw new NullPointerException("World not constructed");
+		} else {
+			if(instance[p.getX()][p.getY()].getIsClear() || instance[p.getX()][p.getY()].getIsAntHill()){
+				cc = (ClearCell)instance[p.getX()][p.getY()];
+				cc.removeHasAnt();
+				cc.removeAnt();
+			}
+		}	
+	}
+
+	public boolean antIsAlive(int ID) {
+		ClearCell cc;
+		if (instance == null) {
+			throw new NullPointerException("World not constructed");
+		} else {
+			for (int i = 0; i < WORLDSIZE; i++) {
+				for (int j = 0; j < WORLDSIZE; j++) {
+					if (instance[i][j].getIsClear()) {
+						cc = (ClearCell) instance[i][i];
+						if (cc.hasAnt()) {
+							if (cc.getAnt().getId() == ID) {
+								return cc.getAnt().isAlive();
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public Position findAnt(int ID) {
+		ClearCell cc;
+		if (instance == null) {
+			throw new NullPointerException("World not constructed");
+		} else {
+			for (int i = 0; i < WORLDSIZE; i++) {
+				for (int j = 0; j < WORLDSIZE; j++) {
+					if (instance[i][j].getIsClear()) {
+						cc = (ClearCell) instance[i][i];
+						if (cc.hasAnt()) {
+							if (cc.getAnt().getId() == ID) {
+								return new Position(i, j);
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public void killAntAt(Position p) {
+		int x = p.getX();
+		int y = p.getY();
+		ClearCell cc;
+		if (instance[x][y].getIsClear()) {
+			cc = (ClearCell) instance[x][y];
+			cc.removeAnt();
+			cc.removeHasAnt();
+			cc.getAnt().setToDead();
+		}
+	}
+
+	public int adjacentAnts(Position pos, Color col) {
+		int n =0;
+		for (int dir = 0; dir<5 ; dir++){
+			if (someAntAt(pos) && antAt(pos).getColor()==col){
+				++n;
+			}
+		}		
+		return n;
+	}	
+
+	public void checkForSurroundedAntAt(Position pos) {
+		Ant a;
+		ClearCell cc;
+		if (someAntAt(pos)){
+			a = antAt(pos);
+			if (adjacentAnts(pos, Color.otherColor(a.getColor()))>=5){
+				killAntAt(pos);
+				cc = (ClearCell)instance[pos.getX()][pos.getY()];
+				cc.setFood(3);
+			}
+		}
+	}
+
+	public void checkForSurroundedAnts(Position pos) {
+		checkForSurroundedAntAt(pos);
+		for (int dir=0; dir<5; dir++){
+			checkForSurroundedAntAt(pos.adjacentCell(pos, dir));
+		}		
 	}
 }

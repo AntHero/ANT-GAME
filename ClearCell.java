@@ -3,7 +3,7 @@ package antgame;
 public class ClearCell extends Cell {
 
 	Position position;
-	Ant ant;
+	Ant ant = null;
 	boolean hasAnt; // this might be unneeded as they it can be implemented
 					// later with just ant
 	int food;
@@ -95,7 +95,7 @@ public class ClearCell extends Cell {
 
 	//// sets cell to have a ant
 	// asserts there is no ant there already
-	public void setAntExist() {
+	public void setHasAnt() {
 		assert(hasAnt == false);
 		this.hasAnt = true;
 	}
@@ -108,7 +108,7 @@ public class ClearCell extends Cell {
 	}
 
 	// sets cell to not have an ant
-	public void removeAntExist() {
+	public void removeHasAnt() {
 		this.hasAnt = false;
 	}
 
