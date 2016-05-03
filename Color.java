@@ -3,7 +3,7 @@ package antgame;
  * Stores the two colors the ants can be as an enum.
  * To be used by other classes.
  * 
- * @author Abdulrahman
+ * @author Arco James
  */
 public enum Color {
 	RED, BLACK;
