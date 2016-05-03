@@ -5,7 +5,7 @@ package antgame;
  *This is an interface which links all the seven instruction under it.
  *This will be used in the brain parser to store the text file of the brain in an array list.
  * 
- * @author Arco
+ * @author Abdulrahman
  */
 public interface Instructions {
     
