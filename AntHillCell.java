@@ -1,5 +1,10 @@
 package antgame;
-
+/**
+ * Represents the Anthill cell on the map in the simulation.
+ * 
+ * @author Arco
+ * @author Abdulrahman
+ */
 public class AntHillCell extends ClearCell {
 
 	Color color;
@@ -11,8 +16,16 @@ public class AntHillCell extends ClearCell {
 	// classes
 	// but I thought that was redundant
 	// just initialize ants with their ids after making the AntHillCells
-
 	//
+	
+	/**
+	 * Constructor for AntHillCell class.
+	 * 
+	 * @param x The 'X' coordinate of the cell
+	 * @param y The 'Y' coordinate of the cell
+	 * @param food The number of food items on the cell
+	 * @param color The color of ants which this anthill belongs too.
+	 */
 	public AntHillCell(int x, int y, int food, Color color) {
 		super(x, y, food);
 		// this.ant = new Ant(id, color);
