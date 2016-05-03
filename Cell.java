@@ -1,6 +1,6 @@
 package antgame;
 /**
- * The superclass of AntHillCell and RockyCell
+ * The superclass of AntHillCell, RockyCell and ClearCell
  * Represents a cell in the simulation.
  * 
  * @author Arco
