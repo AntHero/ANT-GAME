@@ -4,6 +4,7 @@ package antgame;
  * Class which deals with the markers in the simulation.
  * 
  * @author Arco
+ * @author Abdulrahman
  */
 public class Markers {
 	int n;
