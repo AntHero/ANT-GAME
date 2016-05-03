@@ -1,5 +1,9 @@
 package antgame;
-
+/**
+ * Represents a clear cell in our simulation.
+ * @author Arco
+ * @author Abdulrahman
+ */
 public class ClearCell extends Cell {
 
 	Position position;
@@ -10,7 +14,14 @@ public class ClearCell extends Cell {
 	// TO-DO implement type marker.
 	int redMarker = -1;
 	int blackMarker = -1;
-
+	
+	/**
+	 * Constructor of the clear cell
+	 * 
+	 * param x 'X' coordinate of the cell
+	 * param y 'Y' coordinate of the cell
+	 * param food The amount of food on this cell
+	 */
 	public ClearCell(int x, int y, int food) {
 		this.hasAnt = false;
 		this.food = food;
@@ -19,100 +30,137 @@ public class ClearCell extends Cell {
 		superFood = food;
 	}
 
-	// ant is no longer on the cell
+	/**
+	 * Removes the ant from this cell
+	 */
 	public void antMovedAway() {
 		this.ant = null;
 		hasAnt = false;
 	}
 
-	// ant is moved to this cell
+	/**
+	 * Add an ant to this cell
+	 * 
+	 * @param ant The ant instance to be put on this cell
+	 */
 	public void antMoveHere(Ant ant) {
 		this.ant = ant;
 		hasAnt = true;
 	}
 
-	// food taken from cell
+	/**
+	 * Take an item of food from this cell
+	 */
 	public void foodPickedUp() {
 		this.food = this.food - 1;
 	}
 
-	// food set down on cell
+	/**
+	 * Set down one iteam of food
+	 */
 	public void foodSetDown() {
 		this.food = this.food + 1;
 	}
 
-	// set number of food on cell
+	/**
+	 * Set the number of food on the cell
+	 */
 	public void setFood(int i) {
 		this.food = i;
 	}
 
-	// set a red marker with marker type set to 0-5
+	/**
+	 * Set a red marker with marker type set to 0-5
+	 */
 	public void setRedMarker(int redMarker) {
 		assert(redMarker >= 0 && redMarker <= 5);
 		this.redMarker = redMarker;
 	}
 
-	// set a black marker with marker type set to 0-5
+	/**
+	 * set a black marker with marker type set to 0-5
+	 */
 	public void setBlackMarker(int blackMarker) {
 		assert(blackMarker >= 0 && blackMarker <= 5);
 		this.blackMarker = blackMarker;
 	}
 
-	// check has red marker
+	/**
+	 * @return Whether or not cell has red marker
+	 */
 	public boolean hasRedMarker() {
 		return redMarker != -1;
 	}
 
-	// check if has black marker
+	/**
+	 * @return Whether or not cell has black marker
+	 */
 	public boolean hasBlackMarker() {
 		return blackMarker != -1;
 	}
 
-	// clear redmarker
+	/**
+	 * Clear red marker from cell
+	 */
 	public void clearRedMarker() {
 		redMarker = -1;
 	}
 
-	// clear blackmarker
+	/**
+	 * Clear black marker from cell
+	 */
 	public void clearBlackMarker() {
 		blackMarker = -1;
 	}
 
-	// get ant
+	/**
+	 * @return The instance of Ant on this cell
+	 */
 	public Ant getAnt() {
 		return ant;
 	}
 
-	// has ant
+	/**
+	 * @return Whether or not this cell has an ant on it.
+	 */
 	public boolean hasAnt() {
 		return hasAnt;
 	}
-
-	// get how much food on cell
+	
+	/**
+	 * @return The amount of food on the cell.
+	 */
 	public int getFood() {
 		return food;
 	}
 
-	//// sets cell to have a ant
-	// asserts there is no ant there already
+	/**
+	 * Checks if the cell has an ant, if not set then sets hasAnt to true.
+	 */
 	public void setHasAnt() {
 		assert(hasAnt == false);
 		this.hasAnt = true;
 	}
 
-	// sets cell to have a specific ant
-	// asserts there is no ant there already
+	/**
+	 * Checks if an ant is in the cell, if not
+	 * sets cell to have a specific ant.
+	 */
 	public void setAnt(Ant ant) {
 		assert(hasAnt == false);
 		this.ant = ant;
 	}
 
-	// sets cell to not have an ant
+	/**
+	 * Sets cell not to contain an ant
+	 */
 	public void removeHasAnt() {
 		this.hasAnt = false;
 	}
 
-	// remove ant from cell
+	/**
+	 * Removes the instance of an ant from the cell.
+	 */
 	public void removeAnt() {
 		this.ant = null;
 	}
