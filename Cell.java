@@ -1,5 +1,11 @@
 package antgame;
-
+/**
+ * The superclass of AntHillCell and RockyCell
+ * Represents a cell in the simulation.
+ * 
+ * @author Arco
+ * @author Abdulrahman
+ */
 public class Cell {
 
 	Position position;
@@ -10,31 +16,44 @@ public class Cell {
 	//initialized in ClearCell class so food access in super
 	int superFood = 0;
 
-	//returns position of cell
+	/**
+	 * @return The position of cell
+	 */
 	public Position getPosition() {
 		return position;
 	}
 
-	//checks if cell is rocky
+	/**
+	 * @return Whether or not the cell is rocky
+	 */
 	public boolean getIsRocky() {
 		return instance.getClass().equals(RockyCell.class);
 	}
 	
-	//checks if cell is clera
+	/**
+	 * @return Whether or not the cell is clear
+	 */
 	public boolean getIsClear() {
 		return instance.getClass().equals(ClearCell.class);
 	}
 	
-	//checks if cell is anthill
+	/**
+	 * @return Whether or not the cell is an anthill.
+	 */
 	public boolean getIsAntHill() {
 		return instance.getClass().equals(AntHillCell.class);
 	}
 
-	//returns anthill color
+	/**
+	 * @return The color of the anthill.
+	 */
 	public Color getHillColor() {
 		return superColor;
 	}
 	
+	/**
+	 * @return The amount of food on the current cell
+	 */
 	public int getFoodAmount(){
 		return superFood;
 	}
