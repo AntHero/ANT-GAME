@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * The class which deals with the text file, and converts to a FSA.
  * @author D7ooM
  */
 public class BrainParser {
@@ -26,6 +26,12 @@ public class BrainParser {
 		
 	}
 
+	/**
+	 * This method checks for the file and sets the filename.
+	 *
+	 * @param filename The name of the antbrain file.
+	 * @return The list of instructions after parsing the antbrain.
+	 */
     public ArrayList brainParser(String fileName) {
         File file = new File(fileName);
         if (!file.exists()) {
@@ -44,8 +50,13 @@ public class BrainParser {
 		return null;
     }
 
-    /* the method creates an array list constisting of instructions taken from
-     *a parsed ant brain file
+    /**
+     * The method creates an array list constisting of instructions taken from a parsed ant brain file.
+     * 
+     * @param filename The name of the ant brain to be parsed.
+     * @throws FileNotFoundException When the specified file is not found.
+     * @throws IOException
+     * @returns The list of instructions after parsing the antbrain.
      */
     public ArrayList proccessBrain(String fileName) throws FileNotFoundException, IOException {
 
