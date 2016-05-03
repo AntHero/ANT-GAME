@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * This is the class which acts as the simulation. 
  * It uses the other class to create the ant game.
- * @author Abdulrahman
+ * @author Arco James
  */
 public class GameSimulator {
 	
