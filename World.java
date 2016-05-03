@@ -1,5 +1,6 @@
 package antgame;
 
+import java.io.File;
 /*
  * @author Arcooo
  */
@@ -27,7 +28,7 @@ public class World {
 	}
 
 	// Creates a randomWorld
-	public Cell[][] randomWorld(int seed) {
+	public Cell[][] randomWorld(String filename, int seed) throws FileNotFoundException {
 		if (instance == null) {
 			// initialize global variable instance
 			instance = new Cell[WORLDSIZE][WORLDSIZE];
@@ -54,14 +55,26 @@ public class World {
 
 			// placing and IDing ants to antHillCells
 			antIDMethod();
+			
+			visualWorld(filename);
 			return instance;
 		}
 		return instance;
 
 	}
 
-	public void premadeWorld() {
-
+	public Cell[][] premadeWorld(String fileName) {
+		instance = new Cell[WORLDSIZE][WORLDSIZE];
+		Cell premade[][];
+		WorldParser wp = new WorldParser();
+		premade = wp.parseWorld(fileName);
+		instance = premade;
+		for (int i =0; i<WORLDSIZE; i++){
+			for (int j =0; j<WORLDSIZE; j++){
+				instance[i][j] = (Cell) premade[i][j];
+			}			
+		}
+		return instance;
 	}
 
 	// creates rocky border
@@ -272,9 +285,9 @@ public class World {
 	}
 
 	// creates a visual text file to see the world
-	public void visualWorld() throws FileNotFoundException {
+	public void visualWorld(String filename) throws FileNotFoundException {
 		int counter = 0;
-		PrintWriter out = new PrintWriter("text.txt");
+		PrintWriter out = new PrintWriter(filename + ".text");
 
 		// i is the y axis due to how printing works
 		for (int i = 0; i < WORLDSIZE; i++) {

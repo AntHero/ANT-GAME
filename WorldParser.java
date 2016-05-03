@@ -15,23 +15,28 @@ public class WorldParser {
     private int redY = 0;
     private int blackX = 0;
     private int blackY = 0;
+    
+    public WorldParser(){
+    	
+    }
 
-    public static void main(String[] args) {
-        File file = new File(args[0]);
+    public Cell[][] parseWorld(String fileName){
+        File file = new File(fileName);
         if (!file.exists()) {
-            System.out.println(args[0] + " does not exist.");
-            return;
+            System.out.println(fileName + " does not exist.");
+            return null;
         }
         if (!(file.isFile() && file.canRead())) {
             System.out.println(file.getName() + " cannot be read from.");
-            return;
+            return null;
         }
         try {
             WorldParser parse = new WorldParser();
 
-            parse.processMap(args[0]);
+            return parse.processMap(fileName);
         } catch (IOException e) {
         }
+        return null;
     }
 
     /*the method below takes a file of the ant game map and converts it to an

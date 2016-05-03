@@ -22,22 +22,26 @@ import java.util.List;
  * @author D7ooM
  */
 public class BrainParser {
+	public BrainParser(){
+		
+	}
 
-    public static void main(String[] args) {
-        File file = new File(args[0]);
+    public ArrayList brainParser(String fileName) {
+        File file = new File(fileName);
         if (!file.exists()) {
-            System.out.println(args[0] + " does not exist.");
-            return;
+            System.out.println(fileName + " does not exist.");
+            return null;
         }
         if (!(file.isFile() && file.canRead())) {
             System.out.println(file.getName() + " cannot be read from.");
-            return;
+            return null;
         }
         try {
             BrainParser parse = new BrainParser();
-            parse.proccessBrain(args[0]);
+            return parse.proccessBrain(fileName);
         } catch (IOException e) {
         }
+		return null;
     }
 
     /* the method creates an array list constisting of instructions taken from
