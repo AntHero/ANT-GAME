@@ -1,5 +1,9 @@
 package antgame;
-
+/**
+ * A Class which represents an ant in the simulation.
+ * 
+ * @author Arco & Abdul
+ */
 public class Ant {
 	int id;
 	int state = 0; 
@@ -9,67 +13,117 @@ public class Ant {
 	boolean hasFood = false;
 	boolean isAlive = true;
 
+	/**
+	 * Constructor of the Ant Class.
+	 * 
+	 * @param id The unique int value for each ant in the simulation
+	 * @param color The color of the ant, either red or black. 
+	 */
 	public Ant(int id, Color color) {
 		this.id = id;
 		this.color = color;
 	}
 	
-	//kill ant
-	public void setToDead() {
+	/**
+	 * Sets the value isAlive to dead. Kills the Ant
+	 */
+	 public void setToDead() {
 		this.isAlive = false;
 	}
 
-	//change state
+	/**
+	 * Change the ants current state.
+	 * 
+	 * @param state The state which the ant will become.
+	 */
 	public void setState(int state) {
 		this.state = state;
 	}
 
-	//set resting
+	/**
+	 * Sets the Ant as resting. Represents the wait after the ant has moved.
+	 * 
+	 * @param resting The value which represents if the ant is at rest.
+	 */
 	public void setResting(int resting) {
 		this.resting = resting;
 	}
 
-	//set direction
+	/**
+	 * Sets the direction which the ant is facing.
+	 * 
+	 * @param direction The direction in which the ant will face.
+	 */
 	public void setDirection(int direction) {
 		assert(direction >= 0 && direction <= 5);	//ensure dir is from 0-5
 		this.direction = direction;
 	}
 	
-	//set ant to have food *note: ants can only carry one food
+	/**
+	 *Sets the ant to be carrying food.
+	 * 
+	 * @param hasFood The boolean value which represents if the ant is carrying food.
+	 */
 	public void setHasFood(boolean hasFood) {
 		this.hasFood = hasFood;
 	}
 
-	
+	/**
+	 * @return The state which the ant is in.
+	 */
 	public int getState() {
 		return state;
 	}
 
+	/**
+	 * @return The color of the ant. (Red or Black)
+	 */
 	public Color getColor() {
 		return color;
 	}
-
+	
+	/**
+	 * @return The value representing whether the ant is resting
+	 */
 	public int getResting() {
 		return resting;
 	}
 
+	/**
+	 * @return The direction which the ant is facing
+	 */
 	public int getDirection() {
 		return direction;
 	}
-
+	
+	/**
+	 * @return Whether or not the ant is carrying food.
+	 */
 	public boolean hasFood() {
 		return hasFood;
 	}
-
+	
+	/**
+	 * @return The ant's ID
+	 */
 	public int getId() {
 		return id;
 	}
-
+	
+	/**
+	 * @return Whether or not the ant is alive
+	 */
 	public boolean isAlive() {
 		return isAlive;
 	}
-
-	//method for turning the direction of the ant	
+	/**
+	 * method for turning the direction of the ant	
+	 * 
+	 * @param lr The direction left or right to be used in the case statement
+	 * @param dir The direction in which the ant is currently facing
+	 * @throws IllegalArgumentException In the case that the switch statement fails.
+	 * @return An integer representing the way the ant will face after turning.
+	 */
 	public int turn(Left_or_Right lr, int dir) {
 		assert(direction >= 0 && direction <= 5);	//ensure dir is from 0-5
 
@@ -84,7 +138,14 @@ public class Ant {
 
 	}
 	
-	//sense the cell in the direction that the ant is facing
+	/**
+	 * Sense the cell in the direction that the ant is facing.
+	 * 
+	 * @param pos The posistion of the ant
+	 * @param dir The direction the ant is facing
+	 * @param sd The direction in which the ant will 'sense'
+	 * @throws IllegalArgumentException in the case the switch statement fails
+	 */
 	public Position sensed_cell(Position pos, int dir, sense_dir sd) {
 		assert(dir >= 0 && dir <= 5);
 
