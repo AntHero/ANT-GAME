@@ -2,7 +2,8 @@ package antgame;
 /**
  * A Class which represents an ant in the simulation.
  * 
- * @author Arco & Abdul
+ * @author Arco
+ * @author Abdulrahman
  */
 public class Ant {
 	int id;
