@@ -1,7 +1,8 @@
 package antgame;
 /**
  * This class represents a rocky cell in the simulation
- * @author Arco James
+ * @author Arco
+ * @author Abdulrahman
  */
 public class RockyCell extends Cell {
         /**
