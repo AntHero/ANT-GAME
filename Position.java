@@ -1,24 +1,42 @@
 package antgame;
-
+/**
+ * This class is used by many other classes to specify where ants and cells are.
+ * 
+ * @author Arco James
+ */
 public class Position {
 	int x;
 	int y;
-	//constructor x and y axis
+	/**
+	 * Constructor of the x and y axis
+	 * @param x 'X' Coordinate
+	 * @param y 'Y' Coordinate
+	 */
 	public Position(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
-	
+	/**
+	 * @return The X coordinate.
+	 */
 	public int getX(){
 		return x;
 				
 	}
 	
+	/**
+	 * @return The Y coordinate
+	 */
 	public int getY(){
 		return y;
 	}
 	
-	//takes Position and Direction parameters to return the adjacent(directly in front) position of current position
+	/**
+	 * takes Position and Direction parameters to return the adjacent(directly in front) position of current position
+	 * @param pos The posistion of the cell
+	 * @param dir The direction which the ant is facing
+	 * @throws IllegalArgumentException If the switch statement fails
+	 * @return The cell adjacent to this one (In relation to where the ant if looking)
 	public Position adjacentCell(Position pos, int dir) {
 		assert(dir>=0 && dir<=5);
 		//local variables for the Position
