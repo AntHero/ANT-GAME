@@ -5,7 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
-
+/**
+ * The class which parses the world take from the text file.
+ * @author Abdulrahman
+ */
 public class WorldParser {
 
     private int numOfRocks = 0;
@@ -19,7 +22,10 @@ public class WorldParser {
     public WorldParser(){
     	
     }
-
+    /**
+     * @param fileName The name of the file to read the world from
+     * @return The array of cells which represents the world
+     */
     public Cell[][] parseWorld(String fileName){
         File file = new File(fileName);
         if (!file.exists()) {
@@ -39,9 +45,13 @@ public class WorldParser {
         return null;
     }
 
-    /*the method below takes a file of the ant game map and converts it to an
-     array of cells. then it calls the cheker to test that the map is 
-     syntactically correct before returning the map.*/
+    /**
+     *The method below takes a file of the ant game map and converts it to an
+     *array of cells. then it calls the cheker to test that the map is 
+     *syntactically correct before returning the map.
+     * @param fileName The file to read the world from.
+     * @return An array of cells representing the map/
+     */
     public Cell[][] processMap(String fileName) throws FileNotFoundException, IOException {
         File file = new File(fileName);
 
@@ -106,7 +116,13 @@ public class WorldParser {
         }
     }
 
-    //the method below checks if the map is syntactically correct for contests
+    /**  
+     *the method below checks if the map is syntactically correct for contests
+     * @param map The array of cells to be checked for syntactically correct
+     * @param x The cell's 'X' coordinate
+     * @param y The cell's 'Y' coordinate
+     * @return Whether or not the map is syntactically correct.
+     */
     public boolean checker(Cell[][] map, int x, int y) {
         boolean pass = true;
 
@@ -125,6 +141,11 @@ public class WorldParser {
         return pass;
     }
     
+    /**
+     * Checks if the map has two anthills.
+     * @param map The world to check for anthills
+     * @return Whether or not the world has the appropriate amount of anthills
+     */
     public boolean anhillchecker(Cell[][] map){// method does not work yet!
         boolean pass = true;
         if (redX == 0 || redY == 0 || blackX == 0 || blackY == 0) {//checks there is two anthills
