@@ -8,6 +8,7 @@ import java.io.IOException;
 /**
  * The class which parses the world take from the text file.
  * @author Abdulrahman
+ * @author Arco
  */
 public class WorldParser {
 
