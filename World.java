@@ -1,13 +1,14 @@
 package antgame;
 
 import java.io.File;
-/*
- * @author Arcooo
- */
+
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Random;
-
+/**
+ * Represent the world in our simulation.
+ * @author Arco James
+ */
 public class World {
 	static final int WORLDSIZE = 150; // maximum worldsize from requirements
 	private static Cell instance[][] = null; // global 2D Cell array
@@ -19,7 +20,11 @@ public class World {
 	public World() {
 	}
 
-	// return cell in the 2D cell array
+	/**
+	 * @param x The 'X' coordinate of the cell
+	 * @param y The 'Y' coordinate of the cell
+	 * @return Cell in the 2D cell array
+	 */
 	public Cell getCell(int x, int y) {
 		if (instance == null) { // checks if instance is valid and can be used
 			return null;
@@ -27,7 +32,12 @@ public class World {
 		return instance[x][y];
 	}
 
-	// Creates a randomWorld
+	/**
+	 * Creates a randomWorld
+	 * @param filename Name of the file to create the world with.
+	 * @param seed Used to generate the random world
+	 * @return 2D array of cells representing a world
+	 */
 	public Cell[][] randomWorld(String filename, int seed) throws FileNotFoundException {
 		if (instance == null) {
 			// initialize global variable instance
@@ -62,7 +72,11 @@ public class World {
 		return instance;
 
 	}
-
+	/**
+	 * Reads in a world from a text file and creates it in a 2D array of cells
+	 * @param fileName The file to read the world from
+	 * @return The array containing the world.
+	 */
 	public Cell[][] premadeWorld(String fileName) {
 		instance = new Cell[WORLDSIZE][WORLDSIZE];
 		Cell premade[][];
@@ -77,7 +91,9 @@ public class World {
 		return instance;
 	}
 
-	// creates rocky border
+	/**
+	 * creates rocky border
+	 */`
 	private void createRockyBorder() {
 		for (int i = 0; i < WORLDSIZE; i++) {
 			instance[i][0] = new RockyCell(i, 0); // top
@@ -87,7 +103,12 @@ public class World {
 		}
 	}
 
-	// creates anthills
+	/**
+	 * creates anthills
+	 * @param seedX 'X' coordinate from the map
+	 * @param seedY 'Y' coordinate from the map
+	 * @param col The color of the anthill.
+	 */
 	private void antHillCreatorHelper(int seedX, int seedY, Color col) {
 		int xCoord, yCoord;
 
@@ -182,7 +203,10 @@ public class World {
 		}
 	}
 
-	// places 5 5x5 food blobs randomly
+	/**
+	 * Places 5 5x5 food blobs randomly
+	 * @param seed The map seed
+	 */
 	private void placeFoodBlobs(int seed) {
 		int blobCounter = 0;
 		int seedCounter = seed + 5;
@@ -219,7 +243,10 @@ public class World {
 		}
 	}
 
-	// places 14 single random rocky cells
+	/**
+	 * Places 14 single random rocky cells
+	 * @param seed The worlds seed
+	 */
 	private void placeRandomRocky(int seed) {
 		int rockyCounter = 0;
 		int rockySeed = seed + 100;
@@ -244,7 +271,9 @@ public class World {
 		}
 	}
 
-	// fills instance (the 2D Cell array) with clear cells
+	/**
+	 * fills instance (the 2D Cell array) with clear cells
+	 */
 	private void fillWithClear() {
 		for (int i = 0; i < WORLDSIZE; i++) {
 			for (int j = 0; j < WORLDSIZE; j++) {
@@ -255,7 +284,9 @@ public class World {
 		}
 	}
 
-	// this method needs to come after all cells initiated
+	/**
+	 * Checks if cells will contain ants and assigns the ant to the cell if so.
+	 */
 	private void antIDMethod() {
 		Color cHolder;
 		int antID = 0; // check if i need to make this static
@@ -284,7 +315,10 @@ public class World {
 		}
 	}
 
-	// creates a visual text file to see the world
+	/**
+	 * Creates a visual text file to see the world
+	 * @param filename The file name of the world to visualise
+	 */
 	public void visualWorld(String filename) throws FileNotFoundException {
 		int counter = 0;
 		PrintWriter out = new PrintWriter(filename + ".text");
@@ -323,7 +357,10 @@ public class World {
 		}
 		out.close();
 	}
-	
+	/**
+	 * @param p The posistion to check
+	 * @returns Whether or not there is an ant at posistion 'p'
+	 */
 	public boolean someAntAt(Position p){
 		ClearCell cc;
 		if (instance == null) {
@@ -336,7 +373,10 @@ public class World {
 		}
 		return false;	//never should get here
 	}
-	
+	/**
+	 * @param The posistion to check
+	 * @return The ant at posistion P if there is one.
+	 */
 	public Ant antAt(Position p){
 		ClearCell cc;
 		if (instance == null) {
@@ -350,6 +390,10 @@ public class World {
 		return null;
 	}
 	
+	/**
+	 * @param p The posistion to place the ant at.
+	 * @param a The ant to be placed.
+	 */
 	public void setAntAt(Position p, Ant a){
 		ClearCell cc;
 		if (instance == null) {
@@ -363,6 +407,10 @@ public class World {
 		}	
 	}
 	
+	/**
+	 * Removes ant from a cell on the map
+	 * @param p The posistion to remove the ant from
+	 */
 	public void clearAntAt(Position p){
 		ClearCell cc;
 		if (instance == null) {
@@ -375,7 +423,11 @@ public class World {
 			}
 		}	
 	}
-
+	
+	/**
+	 * @param ID The ID of the ant to check for.
+	 * @return Whether or not the ant is alive.
+	 */
 	public boolean antIsAlive(int ID) {
 		ClearCell cc;
 		if (instance == null) {
@@ -396,7 +448,12 @@ public class World {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Checks the world for a specified ant
+	 * @param ID The ID of the ant to find
+	 * @return The posistion of the ant on the world
+	 */
 	public Position findAnt(int ID) {
 		ClearCell cc;
 		if (instance == null) {
@@ -417,7 +474,11 @@ public class World {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Kills the ant at the specified posistion
+	 * @param p The location where the ant to be killed is currently.
+	 */
 	public void killAntAt(Position p) {
 		int x = p.getX();
 		int y = p.getY();
@@ -429,7 +490,12 @@ public class World {
 			cc.getAnt().setToDead();
 		}
 	}
-
+	/**
+	 * Checks if ants are next to eachother
+	 * @param pos The posistion of the ant for which to find the adjacent ants
+	 * @param col The color of the ant
+	 * @return The number of the ants adjacent to this ant.
+	 */
 	public int adjacentAnts(Position pos, Color col) {
 		int n =0;
 		for (int dir = 0; dir<5 ; dir++){
@@ -439,7 +505,11 @@ public class World {
 		}		
 		return n;
 	}	
-
+	
+	/**
+	 * Checks if the ant is surrounded
+	 * @param pos The posistion of the potentially surrounded ant.
+	 */
 	public void checkForSurroundedAntAt(Position pos) {
 		Ant a;
 		ClearCell cc;
@@ -453,6 +523,10 @@ public class World {
 		}
 	}
 
+	/**
+	 * Checks if the ant is surrounded
+	 * @param pos The posistion of the potentially surrounded ant.
+	 */
 	public void checkForSurroundedAnts(Position pos) {
 		checkForSurroundedAntAt(pos);
 		for (int dir=0; dir<5; dir++){
@@ -460,6 +534,9 @@ public class World {
 		}		
 	}
 	
+	/**
+	 * Checks if an ant can move yet.
+	 * @param antID The id of the ant to check if can move.
 	public void step(int antID){
 		
 		if (antIsAlive(antID)){
