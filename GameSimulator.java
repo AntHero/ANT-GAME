@@ -40,5 +40,12 @@ public class GameSimulator {
     	}else{
     		System.out.println("INVALID NUMBER OF ARGUMENTS");
     	}    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
     }
 }

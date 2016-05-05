@@ -4,9 +4,21 @@ import java.io.File;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Random;
+
+import antgame.Instructions.Drop;
+import antgame.Instructions.Flip;
+import antgame.Instructions.Mark;
+import antgame.Instructions.Move;
+import antgame.Instructions.PickUp;
+import antgame.Instructions.Sense;
+import antgame.Instructions.Turn;
+import antgame.Instructions.UnMark;
+
 /**
  * Represent the world in our simulation.
+ * 
  * @author Arco James
  */
 public class World {
@@ -15,14 +27,18 @@ public class World {
 	// global variables to keep track of center of first anthill (RED)
 	private int AntHillX = -1;
 	private int AntHillY = -1;
+	ArrayList<Instructions> blackBrain = null;
+	ArrayList<Instructions> redBrain = null;
 
 	// constructor
 	public World() {
 	}
 
 	/**
-	 * @param x The 'X' coordinate of the cell
-	 * @param y The 'Y' coordinate of the cell
+	 * @param x
+	 *            The 'X' coordinate of the cell
+	 * @param y
+	 *            The 'Y' coordinate of the cell
 	 * @return Cell in the 2D cell array
 	 */
 	public Cell getCell(int x, int y) {
@@ -34,8 +50,11 @@ public class World {
 
 	/**
 	 * Creates a randomWorld
-	 * @param filename Name of the file to create the world with.
-	 * @param seed Used to generate the random world
+	 * 
+	 * @param filename
+	 *            Name of the file to create the world with.
+	 * @param seed
+	 *            Used to generate the random world
 	 * @return 2D array of cells representing a world
 	 */
 	public Cell[][] randomWorld(String filename, int seed) throws FileNotFoundException {
@@ -65,16 +84,19 @@ public class World {
 
 			// placing and IDing ants to antHillCells
 			antIDMethod();
-			
+
 			visualWorld(filename);
 			return instance;
 		}
 		return instance;
 
 	}
+
 	/**
 	 * Reads in a world from a text file and creates it in a 2D array of cells
-	 * @param fileName The file to read the world from
+	 * 
+	 * @param fileName
+	 *            The file to read the world from
 	 * @return The array containing the world.
 	 */
 	public Cell[][] premadeWorld(String fileName) {
@@ -83,17 +105,17 @@ public class World {
 		WorldParser wp = new WorldParser();
 		premade = wp.parseWorld(fileName);
 		instance = premade;
-		for (int i =0; i<WORLDSIZE; i++){
-			for (int j =0; j<WORLDSIZE; j++){
+		for (int i = 0; i < WORLDSIZE; i++) {
+			for (int j = 0; j < WORLDSIZE; j++) {
 				instance[i][j] = (Cell) premade[i][j];
-			}			
+			}
 		}
 		return instance;
 	}
 
 	/**
 	 * creates rocky border
-	 */`
+	 */
 	private void createRockyBorder() {
 		for (int i = 0; i < WORLDSIZE; i++) {
 			instance[i][0] = new RockyCell(i, 0); // top
@@ -105,9 +127,13 @@ public class World {
 
 	/**
 	 * creates anthills
-	 * @param seedX 'X' coordinate from the map
-	 * @param seedY 'Y' coordinate from the map
-	 * @param col The color of the anthill.
+	 * 
+	 * @param seedX
+	 *            'X' coordinate from the map
+	 * @param seedY
+	 *            'Y' coordinate from the map
+	 * @param col
+	 *            The color of the anthill.
 	 */
 	private void antHillCreatorHelper(int seedX, int seedY, Color col) {
 		int xCoord, yCoord;
@@ -205,7 +231,9 @@ public class World {
 
 	/**
 	 * Places 5 5x5 food blobs randomly
-	 * @param seed The map seed
+	 * 
+	 * @param seed
+	 *            The map seed
 	 */
 	private void placeFoodBlobs(int seed) {
 		int blobCounter = 0;
@@ -245,7 +273,9 @@ public class World {
 
 	/**
 	 * Places 14 single random rocky cells
-	 * @param seed The worlds seed
+	 * 
+	 * @param seed
+	 *            The worlds seed
 	 */
 	private void placeRandomRocky(int seed) {
 		int rockyCounter = 0;
@@ -317,7 +347,9 @@ public class World {
 
 	/**
 	 * Creates a visual text file to see the world
-	 * @param filename The file name of the world to visualise
+	 * 
+	 * @param filename
+	 *            The file name of the world to visualise
 	 */
 	public void visualWorld(String filename) throws FileNotFoundException {
 		int counter = 0;
@@ -357,75 +389,84 @@ public class World {
 		}
 		out.close();
 	}
+
 	/**
-	 * @param p The posistion to check
+	 * @param p
+	 *            The posistion to check
 	 * @returns Whether or not there is an ant at posistion 'p'
 	 */
-	public boolean someAntAt(Position p){
+	public boolean someAntAt(Position p) {
 		ClearCell cc;
 		if (instance == null) {
 			throw new NullPointerException("World not constructed");
 		} else {
-			if(instance[p.getX()][p.getY()].getIsClear()){
-				cc = (ClearCell)instance[p.getX()][p.getY()];
+			if (instance[p.getX()][p.getY()].getIsClear()) {
+				cc = (ClearCell) instance[p.getX()][p.getY()];
 				return cc.hasAnt();
 			}
 		}
-		return false;	//never should get here
+		return false; // never should get here
 	}
+
 	/**
-	 * @param The posistion to check
+	 * @param The
+	 *            posistion to check
 	 * @return The ant at posistion P if there is one.
 	 */
-	public Ant antAt(Position p){
+	public Ant antAt(Position p) {
 		ClearCell cc;
 		if (instance == null) {
 			throw new NullPointerException("World not constructed");
 		} else {
-			if(instance[p.getX()][p.getY()].getIsClear()){
-				cc = (ClearCell)instance[p.getX()][p.getY()];
+			if (instance[p.getX()][p.getY()].getIsClear()) {
+				cc = (ClearCell) instance[p.getX()][p.getY()];
 				return cc.getAnt();
 			}
 		}
 		return null;
 	}
-	
+
 	/**
-	 * @param p The posistion to place the ant at.
-	 * @param a The ant to be placed.
+	 * @param p
+	 *            The posistion to place the ant at.
+	 * @param a
+	 *            The ant to be placed.
 	 */
-	public void setAntAt(Position p, Ant a){
+	public void setAntAt(Position p, Ant a) {
 		ClearCell cc;
 		if (instance == null) {
 			throw new NullPointerException("World not constructed");
 		} else {
-			if(instance[p.getX()][p.getY()].getIsClear() || instance[p.getX()][p.getY()].getIsAntHill()){
-				cc = (ClearCell)instance[p.getX()][p.getY()];
+			if (instance[p.getX()][p.getY()].getIsClear() || instance[p.getX()][p.getY()].getIsAntHill()) {
+				cc = (ClearCell) instance[p.getX()][p.getY()];
 				cc.setAnt(a);
-				cc.setHasAnt();			
+				cc.setHasAnt();
 			}
-		}	
+		}
 	}
-	
+
 	/**
 	 * Removes ant from a cell on the map
-	 * @param p The posistion to remove the ant from
+	 * 
+	 * @param p
+	 *            The posistion to remove the ant from
 	 */
-	public void clearAntAt(Position p){
+	public void clearAntAt(Position p) {
 		ClearCell cc;
 		if (instance == null) {
 			throw new NullPointerException("World not constructed");
 		} else {
-			if(instance[p.getX()][p.getY()].getIsClear() || instance[p.getX()][p.getY()].getIsAntHill()){
-				cc = (ClearCell)instance[p.getX()][p.getY()];
+			if (instance[p.getX()][p.getY()].getIsClear() || instance[p.getX()][p.getY()].getIsAntHill()) {
+				cc = (ClearCell) instance[p.getX()][p.getY()];
 				cc.removeHasAnt();
 				cc.removeAnt();
 			}
-		}	
+		}
 	}
-	
+
 	/**
-	 * @param ID The ID of the ant to check for.
+	 * @param ID
+	 *            The ID of the ant to check for.
 	 * @return Whether or not the ant is alive.
 	 */
 	public boolean antIsAlive(int ID) {
@@ -448,10 +489,12 @@ public class World {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Checks the world for a specified ant
-	 * @param ID The ID of the ant to find
+	 * 
+	 * @param ID
+	 *            The ID of the ant to find
 	 * @return The posistion of the ant on the world
 	 */
 	public Position findAnt(int ID) {
@@ -474,10 +517,12 @@ public class World {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Kills the ant at the specified posistion
-	 * @param p The location where the ant to be killed is currently.
+	 * 
+	 * @param p
+	 *            The location where the ant to be killed is currently.
 	 */
 	public void killAntAt(Position p) {
 		int x = p.getX();
@@ -490,34 +535,40 @@ public class World {
 			cc.getAnt().setToDead();
 		}
 	}
+
 	/**
 	 * Checks if ants are next to eachother
-	 * @param pos The posistion of the ant for which to find the adjacent ants
-	 * @param col The color of the ant
+	 * 
+	 * @param pos
+	 *            The posistion of the ant for which to find the adjacent ants
+	 * @param col
+	 *            The color of the ant
 	 * @return The number of the ants adjacent to this ant.
 	 */
 	public int adjacentAnts(Position pos, Color col) {
-		int n =0;
-		for (int dir = 0; dir<5 ; dir++){
-			if (someAntAt(pos) && antAt(pos).getColor()==col){
+		int n = 0;
+		for (int dir = 0; dir < 5; dir++) {
+			if (someAntAt(pos) && antAt(pos).getColor() == col) {
 				++n;
 			}
-		}		
+		}
 		return n;
-	}	
-	
+	}
+
 	/**
 	 * Checks if the ant is surrounded
-	 * @param pos The posistion of the potentially surrounded ant.
+	 * 
+	 * @param pos
+	 *            The posistion of the potentially surrounded ant.
 	 */
 	public void checkForSurroundedAntAt(Position pos) {
 		Ant a;
 		ClearCell cc;
-		if (someAntAt(pos)){
+		if (someAntAt(pos)) {
 			a = antAt(pos);
-			if (adjacentAnts(pos, Color.otherColor(a.getColor()))>=5){
+			if (adjacentAnts(pos, Color.otherColor(a.getColor())) >= 5) {
 				killAntAt(pos);
-				cc = (ClearCell)instance[pos.getX()][pos.getY()];
+				cc = (ClearCell) instance[pos.getX()][pos.getY()];
 				cc.setFood(3);
 			}
 		}
@@ -525,33 +576,135 @@ public class World {
 
 	/**
 	 * Checks if the ant is surrounded
-	 * @param pos The posistion of the potentially surrounded ant.
+	 * 
+	 * @param pos
+	 *            The posistion of the potentially surrounded ant.
 	 */
 	public void checkForSurroundedAnts(Position pos) {
 		checkForSurroundedAntAt(pos);
-		for (int dir=0; dir<5; dir++){
+		for (int dir = 0; dir < 5; dir++) {
 			checkForSurroundedAntAt(pos.adjacentCell(pos, dir));
-		}		
+		}
 	}
-	
+
+	public int foodAt(Position p) {
+		ClearCell cc;
+		if (instance == null) {
+			throw new NullPointerException("World not constructed");
+		} else {
+			if (instance[p.getX()][p.getY()].getIsClear()) {
+				cc = (ClearCell) instance[p.getX()][p.getY()];
+				return cc.getFood();
+			}
+		}
+		return 0;
+	}
+
+	public void setFoodAt(Position p, int f) {
+		ClearCell cc;
+		if (instance == null) {
+			throw new NullPointerException("World not constructed");
+		} else {
+			if (instance[p.getX()][p.getY()].getIsClear()) {
+				cc = (ClearCell) instance[p.getX()][p.getY()];
+				cc.setFood(f);
+			}
+		}
+	}
+
+	public boolean anthillAt(Position p, Color c) {
+		AntHillCell acc;
+		if (instance == null) {
+			throw new NullPointerException("World not constructed");
+		} else {
+			if (instance[p.getX()][p.getY()].getIsAntHill()) {
+				acc = (AntHillCell) instance[p.getX()][p.getY()];
+				return (acc.getColor() == c);
+			}
+		}
+		return false;
+	}
+
+	public Instructions getInstruction(Color c, int state) {
+		if (redBrain == null || blackBrain == null) {
+			System.out.println("brains not set");
+			return null;
+		} else {
+			if (c == Color.RED) {
+				return (Instructions) redBrain.get(state);
+			} else {
+				return (Instructions) redBrain.get(state);
+			}
+		}
+	}
+
 	/**
 	 * Checks if an ant can move yet.
-	 * @param antID The id of the ant to check if can move.
-	public void step(int antID){
-		
-		if (antIsAlive(antID)){
+	 * 
+	 * @param antID
+	 *            The id of the ant to check if can move.
+	 */
+	public void step(int antID, ArrayList<Instructions> brain) {
+
+		if (antIsAlive(antID)) {
 			Position p = findAnt(antID);
 			Ant a = antAt(p);
 			
-			if (a.getResting() > 0){
-				a.setResting(a.getResting()-1);				
-			}else{
-				
+
+			if (a.getResting() > 0) {
+				a.setResting(a.getResting() - 1);
+			} else {
+				if(getInstruction(a.getColor(), a.getState()).equals(Sense.class)){
+					int st = c
+				}else if(getInstruction(a.getColor(), a.getState()).equals(Mark.class)){
+					
+				}else if(getInstruction(a.getColor(), a.getState()).equals(UnMark.class)){
+
+				}else if(getInstruction(a.getColor(), a.getState()).equals(PickUp.class)){
+
+				}else if(getInstruction(a.getColor(), a.getState()).equals(Drop.class)){
+
+				}else if(getInstruction(a.getColor(), a.getState()).equals(Turn.class)){
+
+				}else if(getInstruction(a.getColor(), a.getState()).equals(Move.class)){
+
+				}else if(getInstruction(a.getColor(), a.getState()).equals(Flip.class)){
+
+				}else{
+					
+				}
 			}
-			
-			
+		
 		}
 	}
-	
-	
+
+	public boolean cellMatches(Position p, Condition cond, Color c) {
+		if (instance[p.getX()][p.getY()].getIsRocky() == true) {
+			return false;
+		} else {
+			switch (cond) {
+			case Friend:
+				return someAntAt(p) && antAt(p).getColor() == c;
+			case Foe:
+				return someAntAt(p) && antAt(p).getColor() == c;
+			case FriendWithFood:
+				return someAntAt(p) && antAt(p).getColor() == c && antAt(p).hasFood();
+			case FoeWithFood:
+				return someAntAt(p) && antAt(p).getColor() == c && antAt(p).hasFood();
+			case Food:
+				return instance[p.getX()][p.getY()].getFoodAmount() < 0;
+			case Rock:
+				return false;
+			case Marker:
+				return false; // Need to implement markers first
+			case FoeMarker:
+				return false; // Need to implement markers first
+			case Home:
+				return instance[p.getX()][p.getY()].getIsAntHill() && instance[p.getX()][p.getY()].getHillColor() == c;
+			case FoeHome:
+				return instance[p.getX()][p.getY()].getIsAntHill() && instance[p.getX()][p.getY()].getHillColor() == c;
+			}
+			return false;
+		}
+	}
 }

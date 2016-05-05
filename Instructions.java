@@ -16,7 +16,7 @@ public interface Instructions {
         sense_dir p;
         int st1;
         int st2;
-        condition c;
+        Condition c;
         int markerNum;
         /**
          * @param x The direction the ant will be facing when 'sensing'
@@ -24,7 +24,7 @@ public interface Instructions {
          * @param stateNum2 State in the FSA
          * @param cond The cell's condition
          */
-        public Sense(sense_dir x, int stateNum1, int stateNum2, condition cond) {
+        public Sense(sense_dir x, int stateNum1, int stateNum2, Condition cond) {
             this.p = x;
             this.st1 = stateNum1;
             this.st2 = stateNum2;
@@ -38,7 +38,7 @@ public interface Instructions {
          * @param cond The cell's condition
          * @param afterMarker The number of the marker
          */
-        Sense(sense_dir x, int stateNum1, int stateNum2, condition cond, int afterMarker) {
+        Sense(sense_dir x, int stateNum1, int stateNum2, Condition cond, int afterMarker) {
             this.p = x;
             this.st1 = stateNum1;
             this.st2 = stateNum2;

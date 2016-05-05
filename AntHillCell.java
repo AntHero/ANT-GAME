@@ -36,5 +36,8 @@ public class AntHillCell extends ClearCell {
 							//you cant access subclasses from object *****Cell[][]
 
 	}
+	public Color getColor(){
+		return color;
+	}
 
 }
