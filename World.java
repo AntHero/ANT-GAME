@@ -655,7 +655,9 @@ public class World {
 				a.setResting(a.getResting() - 1);
 			} else {
 				if(getInstruction(a.getColor(), a.getState()).equals(Sense.class)){
-					int st = c
+					Position pp = sensedCell();
+					
+					if(cellMatches(sensedCell()))
 				}else if(getInstruction(a.getColor(), a.getState()).equals(Mark.class)){
 					
 				}else if(getInstruction(a.getColor(), a.getState()).equals(UnMark.class)){
@@ -679,20 +681,20 @@ public class World {
 	}
 
 	public boolean cellMatches(Position p, Condition cond, Color c) {
-		if (instance[p.getX()][p.getY()].getIsRocky() == true) {
+		if (instance[p.getX()][p.getY()].getIsRocky()) {
 			return false;
 		} else {
 			switch (cond) {
 			case Friend:
 				return someAntAt(p) && antAt(p).getColor() == c;
 			case Foe:
-				return someAntAt(p) && antAt(p).getColor() == c;
+				return someAntAt(p) && antAt(p).getColor() != c;
 			case FriendWithFood:
 				return someAntAt(p) && antAt(p).getColor() == c && antAt(p).hasFood();
 			case FoeWithFood:
-				return someAntAt(p) && antAt(p).getColor() == c && antAt(p).hasFood();
+				return someAntAt(p) && antAt(p).getColor() != c && antAt(p).hasFood();
 			case Food:
-				return instance[p.getX()][p.getY()].getFoodAmount() < 0;
+				return instance[p.getX()][p.getY()].getFoodAmount() > 0;
 			case Rock:
 				return false;
 			case Marker:
@@ -702,7 +704,7 @@ public class World {
 			case Home:
 				return instance[p.getX()][p.getY()].getIsAntHill() && instance[p.getX()][p.getY()].getHillColor() == c;
 			case FoeHome:
-				return instance[p.getX()][p.getY()].getIsAntHill() && instance[p.getX()][p.getY()].getHillColor() == c;
+				return instance[p.getX()][p.getY()].getIsAntHill() && instance[p.getX()][p.getY()].getHillColor() != c;
 			}
 			return false;
 		}

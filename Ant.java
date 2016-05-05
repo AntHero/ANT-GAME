@@ -147,7 +147,7 @@ public class Ant {
 	 * @param sd The direction in which the ant will 'sense'
 	 * @throws IllegalArgumentException in the case the switch statement fails
 	 */
-	public Position sensed_cell(Position pos, int dir, sense_dir sd) {
+	public Position sensedCell(Position pos, int dir, sense_dir sd) {
 		assert(dir >= 0 && dir <= 5);
 
 		switch (sd) {
