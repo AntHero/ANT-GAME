@@ -118,6 +118,7 @@ public class BrainParser {
                 brain.add(new Flip(i, st1, st2));
             } else {
                 System.out.println("incorect istruction detected");
+                return new ArrayList();
             }
 
         }
