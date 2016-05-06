@@ -1,5 +1,7 @@
 package antgame;
 
+import antgame2.Color;
+
 /**
  * Class which deals with the markers in the simulation.
  * 
@@ -25,4 +27,8 @@ public class Markers {
 	Markers(int i) {
         this.n = i;
     }
+	
+	public int getNumber(){
+		return n;
+	}
 }
