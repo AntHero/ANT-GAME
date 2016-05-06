@@ -76,7 +76,7 @@ public class BrainParser {
             int afterMarker;
 
             if (s[0].equals("Sense")) {
-                sense_dir cuSen = sense_dir.valueOf(s[1]);
+                Sense_dir cuSen = Sense_dir.valueOf(s[1]);
                 st1 = Integer.parseInt(s[2]);
                 st2 = Integer.parseInt(s[3]);
                 Condition cond = Condition.valueOf(s[4]);

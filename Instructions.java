@@ -14,7 +14,7 @@ public interface Instructions {
 	 * Instructions for the ant to sense its cells.
 	 */
 	public class Sense implements Instructions {
-		sense_dir p;
+		Sense_dir p;
 		int st1;
 		int st2;
 		Condition c;
@@ -30,7 +30,7 @@ public interface Instructions {
 		 * @param cond
 		 *            The cell's condition
 		 */
-		public Sense(sense_dir x, int stateNum1, int stateNum2, Condition cond) {
+		public Sense(Sense_dir x, int stateNum1, int stateNum2, Condition cond) {
 			this.p = x;
 			this.st1 = stateNum1;
 			this.st2 = stateNum2;
@@ -49,7 +49,7 @@ public interface Instructions {
 		 * @param afterMarker
 		 *            The number of the marker
 		 */
-		Sense(sense_dir x, int stateNum1, int stateNum2, Condition cond, int afterMarker) {
+		Sense(Sense_dir x, int stateNum1, int stateNum2, Condition cond, int afterMarker) {
 			this.p = x;
 			this.st1 = stateNum1;
 			this.st2 = stateNum2;
@@ -57,7 +57,7 @@ public interface Instructions {
 			this.markerNum = afterMarker;
 		}
 
-		public sense_dir getP() {
+		public Sense_dir getP() {
 			return p;
 		}
 

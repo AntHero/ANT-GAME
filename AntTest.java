@@ -25,15 +25,15 @@ public class AntTest extends TestCase {
 
 	public void testSensedCell(){
 		//odd x axis
-		assertEquals(a.sensedCell(new Position(1,1), 0, sense_dir.Here), new Position(1,1));
-		assertEquals(a.sensedCell(new Position(1,1), 0, sense_dir.Ahead), new Position(2,1));
-		assertEquals(a.sensedCell(new Position(1,1), 0, sense_dir.LeftAhead), new Position(2,0));
-		assertEquals(a.sensedCell(new Position(1,1), 0, sense_dir.RightAhead), new Position(2,2));
+		assertEquals(a.sensedCell(new Position(1,1), 0, Sense_dir.Here), new Position(1,1));
+		assertEquals(a.sensedCell(new Position(1,1), 0, Sense_dir.Ahead), new Position(2,1));
+		assertEquals(a.sensedCell(new Position(1,1), 0, Sense_dir.LeftAhead), new Position(2,0));
+		assertEquals(a.sensedCell(new Position(1,1), 0, Sense_dir.RightAhead), new Position(2,2));
 
 		//even x axis
-		assertEquals(a.sensedCell(new Position(2,2), 0, sense_dir.Here), new Position(2, 2));
-		assertEquals(a.sensedCell(new Position(2,2), 0, sense_dir.Ahead), new Position(3, 2));
-		assertEquals(a.sensedCell(new Position(2,2), 0, sense_dir.LeftAhead), new Position(2,1));
-		assertEquals(a.sensedCell(new Position(2,2), 0, sense_dir.RightAhead),new Position(2,3));
+		assertEquals(a.sensedCell(new Position(2,2), 0, Sense_dir.Here), new Position(2, 2));
+		assertEquals(a.sensedCell(new Position(2,2), 0, Sense_dir.Ahead), new Position(3, 2));
+		assertEquals(a.sensedCell(new Position(2,2), 0, Sense_dir.LeftAhead), new Position(2,1));
+		assertEquals(a.sensedCell(new Position(2,2), 0, Sense_dir.RightAhead),new Position(2,3));
 	}
 }
