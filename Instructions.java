@@ -188,25 +188,25 @@ public interface Instructions {
 	 * Instructions for the ant to turn
 	 */
 	public class Turn implements Instructions {
-		Left_or_Right lr;
-		int st2;
+		LoR lr;
+		int st;
 
 		/**
 		 * @param lr
 		 *            The value 'Left' or 'Right'
 		 * @param stateNum
 		 */
-		public Turn(Left_or_Right lr, int stateNum) {
+		public Turn(LoR lr, int stateNum) {
 			this.lr = lr;
-			this.st2 = stateNum;
+			this.st = stateNum;
 		}
 
-		public Left_or_Right getLr() {
+		public LoR getLr() {
 			return lr;
 		}
 
-		public int getSt2() {
-			return st2;
+		public int getSt() {
+			return st;
 		}
 
 	}

@@ -4,6 +4,6 @@ package antgame;
  * 
  * @author Arco
  */
-public enum Left_or_Right {
+public enum LoR {
 	Left, Right;
 }
