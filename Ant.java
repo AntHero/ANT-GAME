@@ -10,7 +10,7 @@ public class Ant {
 	int state = 0; 
 	Color color;
 	int resting = 0;
-	int direction = 0;
+	static int direction = 0;
 	boolean hasFood = false;
 	boolean isAlive = true;
 
@@ -125,7 +125,7 @@ public class Ant {
 	 * @throws IllegalArgumentException In the case that the switch statement fails.
 	 * @return An integer representing the way the ant will face after turning.
 	 */
-	public int turn(Left_or_Right lr, int dir) {
+	public static int turn(Left_or_Right lr, int dir) {
 		assert(direction >= 0 && direction <= 5);	//ensure dir is from 0-5
 
 		switch (lr) {

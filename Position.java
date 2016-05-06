@@ -38,7 +38,7 @@ public class Position {
 	 * @throws IllegalArgumentException If the switch statement fails
 	 * @return The cell adjacent to this one (In relation to where the ant if looking)
 	 */
-	public Position adjacentCell(Position pos, int dir) {
+	public static Position adjacentCell(Position pos, int dir) {
 		assert(dir>=0 && dir<=5);
 		//local variables for the Position
 		int x = pos.getX();

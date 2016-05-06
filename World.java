@@ -1,7 +1,5 @@
 package antgame;
 
-import java.io.File;
-
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -41,7 +39,7 @@ public class World {
 	 *            The 'Y' coordinate of the cell
 	 * @return Cell in the 2D cell array
 	 */
-	public Cell getCell(int x, int y) {
+	public static Cell getCell(int x, int y) {
 		if (instance == null) { // checks if instance is valid and can be used
 			return null;
 		}
@@ -91,10 +89,9 @@ public class World {
 		return instance;
 
 	}
-	
-	
-	public void thisWorld(Cell[][] x){
-            instance = x;
+
+	public void thisWorld(Cell[][] x) {
+		instance = x;
 	}
 
 	/**
@@ -331,13 +328,13 @@ public class World {
 
 		for (int i = 0; i < WORLDSIZE; i++) {
 			for (int j = 0; j < WORLDSIZE; j++) {
-				// System.out.println(i + " " + j);
-				if (instance[i][j].getIsAntHill()) {
+				// ids ants from left to right, bottom to top
+				if (instance[j][i].getIsAntHill()) {
 					// typecasting Cell to ClearCell
 					// saving it in local variable c
-					c = (ClearCell) instance[i][j];
+					c = (ClearCell) instance[j][i];
 					// getting color
-					cHolder = instance[i][j].getHillColor();
+					cHolder = instance[j][i].getHillColor();
 					// creating ant
 					antOnHill = new Ant(antID, cHolder);
 					++antID;
@@ -479,20 +476,32 @@ public class World {
 		if (instance == null) {
 			throw new NullPointerException("World not constructed");
 		} else {
-			for (int i = 0; i < WORLDSIZE; i++) {
-				for (int j = 0; j < WORLDSIZE; j++) {
-					if (instance[i][j].getIsClear()) {
-						cc = (ClearCell) instance[i][i];
-						if (cc.hasAnt()) {
-							if (cc.getAnt().getId() == ID) {
-								return cc.getAnt().isAlive();
-							}
-						}
-					}
-				}
-			}
+			Position p = findAnt(ID);
+			if(p!=null){
+				return true;
+			}else{
+				return false;
+			}			
+			// System.out.println("hel" + c.hasAnt());
+			// System.out.println("helt" + c.getAnt().isAlive());
+
+			// return c.getAnt().isAlive();
+			// for (int i = 0; i < WORLDSIZE; i++) {
+			// for (int j = 0; j < WORLDSIZE; j++) {
+			// if (instance[i][j].getIsClear()) {
+			// cc = (ClearCell) instance[i][i];
+			// if (cc.hasAnt()) {
+			//
+			// if (cc.getAnt().getId() == ID) {
+			// return cc.getAnt().isAlive();
+			// }
+			// }
+			// }
+			// }
+			// }
 		}
-		return false;
+		// System.out.println("Should not get here");
+		// return false;
 	}
 
 	/**
@@ -509,10 +518,14 @@ public class World {
 		} else {
 			for (int i = 0; i < WORLDSIZE; i++) {
 				for (int j = 0; j < WORLDSIZE; j++) {
-					if (instance[i][j].getIsClear()) {
-						cc = (ClearCell) instance[i][i];
+
+					if (instance[i][j].getIsClear() || instance[i][j].getIsAntHill()) {
+
+						cc = (ClearCell) instance[i][j];
 						if (cc.hasAnt()) {
+							// System.out.println(cc.getAnt());
 							if (cc.getAnt().getId() == ID) {
+								// System.out.println("***");
 								return new Position(i, j);
 							}
 						}
@@ -532,13 +545,17 @@ public class World {
 	public void killAntAt(Position p) {
 		int x = p.getX();
 		int y = p.getY();
-		ClearCell cc;
-		if (instance[x][y].getIsClear()) {
-			cc = (ClearCell) instance[x][y];
-			cc.removeAnt();
-			cc.removeHasAnt();
+		ClearCell cc = (ClearCell) getCell(x, y);
+
+		cc.removeAnt();
+		cc.removeHasAnt();
+		if (cc.hasAnt()) {
 			cc.getAnt().setToDead();
+			if (cc.getAnt().hasFood) {
+				cc.foodSetDown();
+			}
 		}
+
 	}
 
 	/**

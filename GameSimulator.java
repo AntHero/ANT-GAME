@@ -61,7 +61,4 @@ public class GameSimulator {
         System.out.println("finished");
 
     }
-    	
-    	
-    }
 }
