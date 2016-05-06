@@ -82,6 +82,9 @@ public class Position {
 		throw new IllegalArgumentException();
 	}
 	
+	/*
+	*Overides equal method of object so that if x and y of two different instances of position are equals they are equal.
+	*/
 	
 	@Override
     public boolean equals(Object obj) {
