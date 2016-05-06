@@ -19,32 +19,48 @@ public class GameSimulator {
 	 * reads in the two brains and the map.
 	 * @param args The list of arguments
 	 */
+	 
+    static World antWorld = new World();
+    static Cell[][] map;
+
     public static void main(String[] args) throws FileNotFoundException, IOException {
-    	File arg1;
-    	File arg2;
-    	File arg3;
-    	int arg4;
-    	ArrayList blackAntBrain;
-		ArrayList redAntBrain;
-		World antWorld = new World();
-		Cell[][] world;
-    	
-    	if (args.length == 3){
-    		blackAntBrain = new BrainParser().proccessBrain(args[0]);
-    		redAntBrain = new BrainParser().proccessBrain(args[1]);
-    		world = antWorld.premadeWorld(args[2]);
-    	}else if(args.length ==4){
-    		blackAntBrain = new BrainParser().proccessBrain(args[0]);
-    		redAntBrain = new BrainParser().proccessBrain(args[1]);
-    		world = antWorld.randomWorld(args[2], Integer.parseInt(args[3]));
-    	}else{
-    		System.out.println("INVALID NUMBER OF ARGUMENTS");
-    	}    	
-    	
-    	
-    	
-    	
-    	
+
+
+     
+        ArrayList blackAntBrain;
+        ArrayList redAntBrain;
+
+        blackAntBrain = new BrainParser().proccessBrain(args[0]);
+        redAntBrain = new BrainParser().proccessBrain(args[1]);
+        
+        if (args.length == 3) {
+            map = antWorld.premadeWorld(args[2]);
+        } else if (args.length == 4) {
+
+            map = antWorld.randomWorld(args[2], Integer.parseInt(args[3]));           
+        } else {
+            System.out.println("INVALID NUMBER OF ARGUMENTS");
+        }
+        
+        antWorld.thisWorld(map);
+        antWorld.setBlackBrain(blackAntBrain);
+        antWorld.setRedBrain(redAntBrain);
+    }
+    
+    
+    private int roundCount = 0;
+
+    public void oneRound() {
+
+        while (roundCount < 3000) {
+
+            antWorld.round();
+
+        }
+        
+        System.out.println("finished");
+
+    }
     	
     	
     }
