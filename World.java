@@ -91,6 +91,11 @@ public class World {
 		return instance;
 
 	}
+	
+	
+	public void thisWorld(Cell[][] x){
+            instance = x;
+	}
 
 	/**
 	 * Reads in a world from a text file and creates it in a 2D array of cells
