@@ -37,30 +37,16 @@ public class WorldTest extends TestCase {
 		
 		w.killAntAt(p);
 		assertFalse(w.antIsAlive(0));
-//		assert(w.foodAt(p) = )
+	}
+	
+	public void testfoodAt_setfoodAt() throws FileNotFoundException{
+		World w = new World();
+		w.randomWorld("rw", 0);
+		Position p = new Position(1,1);
 		
-		
-		//antisalive, findant, killantat, adjacentants
-		//checkforsurroundedantat, checkforsurroundedant
-		//foodat
-		//setfoodat
-		//anthillat
-		
-		
-		
-		
-		//checkforsurroundedantat, checkforsurroundedant
-		//foodat
-		//setfoodat
-		//getinstruction
-		//step
-		//cellmatches
-		//setmarker
-		//clearmarker
-		//checkmarkerat
-		//checkanymarkerat
-
-		
+		assert(w.foodAt(p)==0);
+		w.setFoodAt(p, 5);
+		assert(w.foodAt(p)!=0);		
 	}
 	
 }
