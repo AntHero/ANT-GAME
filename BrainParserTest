@@ -1,0 +1,52 @@
+
+import antgame.BrainParser;
+import antgame.Instructions.Drop;
+import antgame.Instructions.Flip;
+import antgame.Instructions.Move;
+import antgame.Instructions.Turn;
+import java.util.ArrayList;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+/**
+ *
+ * @author Abdulrahman Alshehri
+ */
+public class BrainParserTest {
+    BrainParser p = new BrainParser();
+    ArrayList a = new ArrayList();
+    public BrainParserTest() {
+       
+    }
+
+   
+    
+    @Test
+    public void testBrainParser(){
+        a = p.brainParser("BlackBrain.ant");        
+        
+        assertTrue(a.get(0) instanceof Flip);
+        assertFalse(a.get(0) instanceof Move);
+        assertTrue(a.get(8) instanceof Turn);
+        assertTrue(a.get(23) instanceof Drop);
+        assertTrue(a.get(400) instanceof Turn);
+    }
+    @Test
+    public void testBrainParser2(){
+        a = p.brainParser("BlackBrain.ant");
+        assertTrue(a.size() == 401);
+    }
+    
+    @Test
+    public void testBrainParser3(){
+        a = p.brainParser("emptyBrain.ant");
+        assertTrue(a.isEmpty());
+    }
+    
+    @Test
+    public void testBrainParser4(){
+        a = p.brainParser("faultyBrain.ant");
+        assertTrue(a.isEmpty());
+    }
+}
