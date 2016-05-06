@@ -1,10 +1,10 @@
 package antgame;
 
-import antgame2.Ant;
-import antgame2.Cell;
-import antgame2.Color;
-import antgame2.Markers;
-import antgame2.Position;
+import antgame.Ant;
+import antgame.Cell;
+import antgame.Color;
+import antgame.Markers;
+import antgame.Position;
 
 /**
  * Represents a clear cell in our simulation.

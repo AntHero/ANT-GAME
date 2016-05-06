@@ -125,7 +125,7 @@ public class Ant {
 	 * @throws IllegalArgumentException In the case that the switch statement fails.
 	 * @return An integer representing the way the ant will face after turning.
 	 */
-	public static int turn(Left_or_Right lr, int dir) {
+	public static int turn(LoR lr, int dir) {
 		assert(direction >= 0 && direction <= 5);	//ensure dir is from 0-5
 
 		switch (lr) {
@@ -156,9 +156,9 @@ public class Ant {
 		case Ahead:
 			return pos.adjacentCell(pos, dir);		//cell the ant is facing with dir
 		case LeftAhead:
-			return pos.adjacentCell(pos, turn(Left_or_Right.Left, dir));	//cell to the left of faced direction
+			return pos.adjacentCell(pos, turn(LoR.Left, dir));	//cell to the left of faced direction
 		case RightAhead:
-			return pos.adjacentCell(pos, turn(Left_or_Right.Right, dir));	//cell to the right of faced direction
+			return pos.adjacentCell(pos, turn(LoR.Right, dir));	//cell to the right of faced direction
 		}
 		throw new IllegalArgumentException();
 	}

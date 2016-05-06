@@ -1,6 +1,6 @@
 package antgame;
 
-import antgame2.Color;
+import antgame.Color;
 
 /**
  * Class which deals with the markers in the simulation.

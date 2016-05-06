@@ -104,7 +104,7 @@ public class BrainParser {
                 st = Integer.parseInt(s[1]);
                 brain.add(new Drop(st));
             } else if (s[0].equals("Turn")) {
-                Left_or_Right lr = Left_or_Right.valueOf(s[1]);
+                LoR lr = LoR.valueOf(s[1]);
                 st = Integer.parseInt(s[2]);
                 brain.add(new Turn(lr, st));
             } else if (s[0].equals("Move")) {
