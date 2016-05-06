@@ -1,0 +1,45 @@
+
+import antgame.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+/**
+ *
+ * @author Abdulrahman Alshehri
+ */
+public class WorldParserTest {
+    
+    WorldParser p = new WorldParser();
+    Cell[][] m = new Cell[150][150];
+    
+    public WorldParserTest() {
+        
+       
+    }
+
+
+    @Test 
+    public void testWorldParser(){
+       m = p.parseWorld("1.world");
+       
+       assertTrue(m[0][0] instanceof RockyCell);
+       assertTrue(m[1][1] instanceof ClearCell);
+       assertFalse(m[1][1] instanceof AntHillCell);
+       assertTrue(m[149][149] instanceof RockyCell);
+       assertFalse(m[0][77] instanceof AntHillCell);
+    }
+    
+    /* 
+     * if uncommented, below test should result in printing
+     * "Please provide a correct map." in console.
+     */
+    @Test 
+    public void testWorldParser2(){
+    //    m = p.parseWorld("4x4.world");
+    
+    }
+ 
+}
