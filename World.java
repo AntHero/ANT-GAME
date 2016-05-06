@@ -654,34 +654,68 @@ public class World {
 		if (antIsAlive(antID)) {
 			Position p = findAnt(antID);
 			Ant a = antAt(p);
-			
+			Instructions instruction = getInstruction(a.getColor(), a.getState());
 
 			if (a.getResting() > 0) {
 				a.setResting(a.getResting() - 1);
 			} else {
-				if(getInstruction(a.getColor(), a.getState()).equals(Sense.class)){
-					Position pp = sensedCell();
-					
-					if(cellMatches(sensedCell()))
-				}else if(getInstruction(a.getColor(), a.getState()).equals(Mark.class)){
-					
-				}else if(getInstruction(a.getColor(), a.getState()).equals(UnMark.class)){
+				if (instruction.equals(Sense.class)) {
+					Position sensedP = a.sensedCell(p, a.getDirection(), ((Sense) instruction).getP());
+					if (cellMatches(sensedP, ((Sense) instruction).getC(), a.getColor())) {
+						a.setState(((Sense) instruction).getSt1());
+					} else {
+						a.setState(((Sense) instruction).getSt2());
+					}
+				} else if (instruction.equals(Mark.class)) {
+					setMarker(p, a.getColor(), ((Mark) instruction).getI());
+					a.setState(((Mark) instruction).getSt());
 
-				}else if(getInstruction(a.getColor(), a.getState()).equals(PickUp.class)){
+				} else if (instruction.equals(UnMark.class)) {
+					clearMarkerAt(p, a.getColor(), ((UnMark) instruction).getI());
+					a.setState(((UnMark) instruction).getSt());
 
-				}else if(getInstruction(a.getColor(), a.getState()).equals(Drop.class)){
-
-				}else if(getInstruction(a.getColor(), a.getState()).equals(Turn.class)){
-
-				}else if(getInstruction(a.getColor(), a.getState()).equals(Move.class)){
-
-				}else if(getInstruction(a.getColor(), a.getState()).equals(Flip.class)){
-
-				}else{
-					
+				} else if (instruction.equals(PickUp.class)) {
+					if (a.hasFood() || foodAt(p) == 0) {
+						a.setState(((PickUp) instruction).getSt2());
+					} else {
+						ClearCell cc = (ClearCell) getCell(p.getX(), p.getY());
+						cc.foodPickedUp();
+						a.setHasFood(true);
+						a.setState(((PickUp) instruction).getSt1());
+					}
+				} else if (instruction.equals(Drop.class)) {
+					if (a.hasFood()) {
+						ClearCell cc = (ClearCell) getCell(p.getX(), p.getY());
+						cc.foodSetDown();
+						a.setHasFood(false);
+					}
+					a.setState(((Drop) instruction).getSt());
+				} else if (instruction.equals(Turn.class)) {
+					a.setDirection(Ant.turn(((Turn) instruction).getLr(), a.getDirection()));
+					a.setState(((Turn) instruction).getSt());
+				} else if (instruction.equals(Move.class)) {
+					Position newp = Position.adjacentCell(p, a.getDirection());
+					if (getCell(newp.getX(), newp.getY()).getIsRocky() || someAntAt(newp)) {
+						a.setState(((Move) instruction).getSt2());
+					} else {
+						clearAntAt(p);
+						setAntAt(newp, a);
+						a.setState(((Move) instruction).getSt2());
+						a.setResting(14);
+						checkForSurroundedAnts(newp);
+					}
+				} else if (instruction.equals(Flip.class)) {
+					RandomInt rand = new RandomInt();
+					if (rand.randomInteger(((Flip) instruction).getP(), 0) == 0) {
+						a.setState(((Flip) instruction).getSt1());
+					} else {
+						a.setState(((Flip) instruction).getSt2());
+					}
+				} else {
+					System.out.println("INVALID INSTRUCTION");
 				}
 			}
-		
+
 		}
 	}
 
@@ -703,9 +737,9 @@ public class World {
 			case Rock:
 				return false;
 			case Marker:
-				return false; // Need to implement markers first
+				return checkAnyMarkerAt(p, c);
 			case FoeMarker:
-				return false; // Need to implement markers first
+				return checkAnyMarkerAt(p, Color.otherColor(c));
 			case Home:
 				return instance[p.getX()][p.getY()].getIsAntHill() && instance[p.getX()][p.getY()].getHillColor() == c;
 			case FoeHome:
@@ -714,19 +748,55 @@ public class World {
 			return false;
 		}
 	}
-	
-	void round() {
-        throw new UnsupportedOperationException("Not yet implemented");
-    	}
-    	
-	void setBlackBrain(ArrayList s) {
-        BlackBrain = new ArrayList();
-        this.BlackBrain = s;
-	  }
 
-    	void setRedBrain(ArrayList s) {
-        RedBrain = new ArrayList();
-        this.RedBrain = s;
-	 }
-	
+	public void setMarker(Position p, Color c, Markers m) {
+		ClearCell cc = (ClearCell) getCell(p.getX(), p.getY());
+		if (c == Color.RED) {
+			cc.setRedMarker(m.getNumber());
+		} else {
+			cc.setBlackMarker(m.getNumber());
+		}
+	}
+
+	public void clearMarkerAt(Position p, Color c, Markers m) {
+		ClearCell cc = (ClearCell) getCell(p.getX(), p.getY());
+		if (c == Color.RED) {
+			cc.clearRedMarker(m.getNumber());
+		} else {
+			cc.clearBlackMarker(m.getNumber());
+		}
+	}
+
+	public boolean checkMarkerAt(Position p, Color c, Markers m) {
+		ClearCell cc = (ClearCell) getCell(p.getX(), p.getY());
+		if (c == Color.RED) {
+			return cc.hasRedMarker(m.getNumber());
+		} else {
+			return cc.hasBlackMarker(m.getNumber());
+		}
+	}
+
+	public boolean checkAnyMarkerAt(Position p, Color c) {
+		ClearCell cc = (ClearCell) getCell(p.getX(), p.getY());
+		for (int i = 0; i < 5; i++) {
+			if (cc.hasRedMarker(i) || cc.hasBlackMarker(i)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void round() {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	void setBlackBrain(ArrayList s) {
+		blackBrain = new ArrayList();
+		this.blackBrain = s;
+	}
+
+	void setRedBrain(ArrayList s) {
+		redBrain = new ArrayList();
+		this.redBrain = s;
+	}
 }
