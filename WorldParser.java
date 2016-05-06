@@ -152,46 +152,6 @@ public class WorldParser {
         if (redX == 0 || redY == 0 || blackX == 0 || blackY == 0) {//checks there is two anthills
             pass = false;
             System.out.println("the map has to have two anthills ");
-            return pass;
-        } else {//checks the orientation of anthills
-            int offset = 8;//number of cells to check in the y axis;
-            int k = redY;
-            boolean backward = false;
-            boolean backward2 = false;
-            for (int i = redX; i < redX + 13; i++) {
-                if (map[i][k] instanceof ClearCell && map[i][k].getClass() != AntHillCell.class) {//to -do always enters
-                    for (int j = k + 1; j < k + offset; j++) {
-                        pass = pass && (map[i][j] instanceof AntHillCell);
-                        //System.out.println(pass);
-                    }
-                } else {
-                    for (int j = k; j > k + offset - 1; j++) {
-                        pass = pass && (map[i][j] instanceof AntHillCell);
-                        System.out.println(pass);
-                    }
-                    pass = pass && (map[i][k + offset] instanceof ClearCell);
-
-                }
-                if (backward) {
-                    offset--;
-                } else {
-
-                    offset++;
-                    if (offset == 14) {
-                        backward = true;
-                    }
-                }
-                //System.out.println(k);
-                //System.out.println(offset);
-                if (backward2){
-                    k++;
-                }else{
-                k--;
-                if(k ==redY -7){
-                    backward2= true;
-                }
-                }
-            }
         }
         return pass;
     }
