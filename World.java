@@ -714,4 +714,19 @@ public class World {
 			return false;
 		}
 	}
+	
+	void round() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    	}
+    	
+	void setBlackBrain(ArrayList s) {
+        BlackBrain = new ArrayList();
+        this.BlackBrain = s;
+	  }
+
+    	void setRedBrain(ArrayList s) {
+        RedBrain = new ArrayList();
+        this.RedBrain = s;
+	 }
+	
 }
